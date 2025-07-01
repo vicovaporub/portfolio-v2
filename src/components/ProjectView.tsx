@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface ProjectData {
   id: string;
@@ -134,9 +135,11 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
           <div className="space-y-6">
             {project.imageUrl && (
               <div className="bg-[var(--background-secondary)] rounded-lg p-4 theme-transition">
-                <img 
+                <Image 
                   src={project.imageUrl} 
                   alt={project.title}
+                  width={800}
+                  height={400}
                   className="w-full h-48 object-cover rounded"
                 />
               </div>
