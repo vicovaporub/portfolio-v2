@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import ProjectView from './ProjectView';
+import ProjectsPage from '../pages/ProjectsPage';
+import ThemeToggle from './ThemeToggle';
 
 interface SidebarItem {
   id: string;
@@ -21,39 +23,37 @@ interface Tab {
 const sidebarItems: SidebarItem[] = [
   {
     id: 'explorer',
-    label: 'EXPLORER',
+    label: 'VICTOR CASTRO',
     icon: '📁',
     isActive: true,
     children: [
-      { id: 'about', label: 'about.md', icon: '📄' },
-      { id: 'projects', label: 'projects/', icon: '📂', children: [
-        { id: 'project1', label: 'project-1.tsx', icon: '⚛️' },
-        { id: 'project2', label: 'project-2.tsx', icon: '⚛️' },
-        { id: 'project3', label: 'project-3.tsx', icon: '⚛️' },
-      ]},
-      { id: 'skills', label: 'skills.json', icon: '⚙️' },
-      { id: 'contact', label: 'contact.ts', icon: '📧' },
+      {
+        id: 'about',
+        label: 'about.md',
+        icon: '📄'
+      },
+      {
+        id: 'projects',
+        label: 'projects/',
+        icon: '📂',
+        children:
+        [
+          { id: 'project1', label: 'project-1.tsx', icon: '⚛️' },
+          { id: 'project2', label: 'project-2.tsx', icon: '⚛️' },
+          { id: 'project3', label: 'project-3.tsx', icon: '⚛️' },
+        ]
+      },
+      {
+        id: 'skills',
+        label: 'skills.json',
+        icon: '⚙️'
+      },
+      {
+        id: 'contact',
+        label: 'contact.ts',
+        icon: '📧'
+      },
     ]
-  },
-  {
-    id: 'search',
-    label: 'SEARCH',
-    icon: '🔍',
-  },
-  {
-    id: 'source-control',
-    label: 'SOURCE CONTROL',
-    icon: '📊',
-  },
-  {
-    id: 'run-and-debug',
-    label: 'RUN AND DEBUG',
-    icon: '🐛',
-  },
-  {
-    id: 'extensions',
-    label: 'EXTENSIONS',
-    icon: '🧩',
   },
 ];
 
@@ -75,12 +75,12 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   };
 
   const handleItemClick = (item: SidebarItem) => {
-    // Only open tabs for files (items without children)
-    if (!item.children && onTabOpen) {
+    if (onTabOpen) {
       let content: string | React.ReactNode;
       
-      // Check if it's a project
-      if (item.id.startsWith('project')) {
+      if (item.id === 'projects') {
+        content = <ProjectsPage />;
+      } else if (item.id.startsWith('project')) {
         content = <ProjectView projectId={item.id} />;
       } else {
         content = `# ${item.label}\n\nThis is a placeholder content for ${item.label}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
@@ -105,14 +105,19 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       <div key={item.id}>
         <div
           className={`
-            flex items-center px-2 py-1 text-xs cursor-pointer transition-all duration-150 select-none
+            flex items-center px-2 py-1 text-xs cursor-pointer transition-all duration-150 select-none theme-transition
             ${depth > 0 ? 'ml-3' : ''}
-            ${isActive ? 'bg-blue-600/30 text-blue-300 font-medium' : 'text-gray-300 hover:text-white hover:bg-gray-700/40'}
+            ${isActive 
+              ? 'bg-[var(--accent-blue-light)] text-[var(--accent-blue)] font-medium' 
+              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
+            }
             ${depth === 0 ? 'font-semibold tracking-wide' : 'font-normal'}
           `}
           onClick={() => {
             if (hasChildren) {
               toggleItem(item.id);
+              // Also open tab for folders
+              handleItemClick(item);
             } else {
               handleItemClick(item);
             }
@@ -125,7 +130,7 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
           )}
           {!hasChildren && depth > 0 && (
             <div className="w-4 mr-1.5 flex justify-center">
-              <span className="text-[8px] text-gray-500">•</span>
+              <span className="text-[8px] text-[var(--text-muted)]">•</span>
             </div>
           )}
           <span className="mr-2 text-[10px] opacity-70">{item.icon}</span>
@@ -135,7 +140,7 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
         </div>
         
         {hasChildren && isExpanded && (
-          <div className="ml-1 border-l border-gray-700/20">
+          <div className="ml-1 border-l border-[var(--border)]/30">
             {item.children!.map(child => renderItem(child, depth + 1))}
           </div>
         )}
@@ -144,29 +149,29 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   };
 
   return (
-    <div className="w-60 h-screen bg-[#1e1e1e] border-r border-[#3c3c3c] flex flex-col font-mono">
-      {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-[#3c3c3c] bg-[#2d2d30]">
-        <h2 className="text-white font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
-        <div className="flex space-x-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
-          <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
-          <div className="w-2.5 h-2.5 rounded-full bg-[#27ca3f]"></div>
+    <div className="w-60 h-screen bg-[var(--sidebar-bg)] border-r border-[var(--border)] flex flex-col font-mono theme-transition">
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
+        <div className="flex items-center space-x-2">
+          <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
+        </div>
+        <div className="flex items-center space-x-1">
+          <ThemeToggle />
+          <div className="w-4 h-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer flex items-center justify-center">
+            <span className="text-[10px]">⋮</span>
+          </div>
         </div>
       </div>
 
-      {/* Sidebar Content */}
       <div className="flex-1 overflow-y-auto sidebar-scrollbar">
         <div className="py-1">
           {sidebarItems.map(item => renderItem(item))}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-[#3c3c3c] p-2 bg-[#2d2d30]">
-        <div className="flex items-center justify-between text-[10px] text-gray-400 font-mono">
-          <span>TypeScript</span>
-          <span>UTF-8</span>
+      <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
+        <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
+          <span>Victor Castro</span>
+          <span>2025</span>
         </div>
       </div>
     </div>

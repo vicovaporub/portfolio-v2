@@ -77,25 +77,25 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
 
   if (!project) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-400">
+      <div className="flex items-center justify-center h-full text-[var(--text-muted)]">
         <p>Project not found</p>
       </div>
     );
   }
 
   return (
-    <div className="h-full bg-[#1e1e1e] text-white">
+    <div className="h-full bg-[var(--background)] text-[var(--text-primary)] theme-transition">
       {/* Project Header */}
-      <div className="border-b border-[#3c3c3c] p-4">
+      <div className="border-b border-[var(--tab-border)] p-4 theme-transition">
         <h1 className="text-2xl font-bold mb-2">{project.title}</h1>
-        <p className="text-gray-300 text-sm leading-relaxed">{project.description}</p>
+        <p className="text-[var(--text-secondary)] text-sm leading-relaxed">{project.description}</p>
         
         {/* Technologies */}
         <div className="flex flex-wrap gap-2 mt-4">
           {project.technologies.map((tech) => (
             <span
               key={tech}
-              className="px-2 py-1 bg-blue-600/20 text-blue-300 text-xs rounded border border-blue-600/30"
+              className="px-2 py-1 bg-[var(--accent-blue-light)] text-[var(--accent-blue)] text-xs rounded border border-[var(--accent-blue)]/20 theme-transition"
             >
               {tech}
             </span>
@@ -104,7 +104,7 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-[#3c3c3c]">
+      <div className="border-b border-[var(--tab-border)] theme-transition">
         <div className="flex">
           {[
             { id: 'overview', label: 'Overview' },
@@ -115,10 +115,10 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as 'overview' | 'features' | 'code')}
               className={`
-                px-4 py-2 text-sm font-medium transition-colors
+                px-4 py-2 text-sm font-medium transition-colors theme-transition
                 ${activeTab === tab.id 
-                  ? 'text-blue-300 border-b-2 border-blue-500 bg-blue-600/10' 
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700/40'
+                  ? 'text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)] bg-[var(--accent-blue-light)]' 
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
                 }
               `}
             >
@@ -133,7 +133,7 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {project.imageUrl && (
-              <div className="bg-gray-800 rounded-lg p-4">
+              <div className="bg-[var(--background-secondary)] rounded-lg p-4 theme-transition">
                 <img 
                   src={project.imageUrl} 
                   alt={project.title}
@@ -144,7 +144,7 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
             
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">About this project</h3>
-              <p className="text-gray-300 leading-relaxed">{project.description}</p>
+              <p className="text-[var(--text-secondary)] leading-relaxed">{project.description}</p>
             </div>
 
             <div className="flex gap-4">
@@ -153,7 +153,7 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-colors"
+                  className="px-4 py-2 bg-[var(--hover-bg)] hover:bg-[var(--border)] rounded text-sm transition-colors theme-transition"
                 >
                   View on GitHub
                 </a>
@@ -163,7 +163,8 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm transition-colors"
+                  className="px-4 py-2 bg-[var(--accent-blue)] hover:bg-[var(--accent-blue-light)] rounded text-sm transition-colors"
+                  style={{ color: 'white' }}
                 >
                   Live Demo
                 </a>
@@ -178,8 +179,8 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
             <ul className="space-y-2">
               {project.features.map((feature, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-blue-400 mr-2 mt-1">•</span>
-                  <span className="text-gray-300">{feature}</span>
+                  <span className="text-[var(--accent-blue)] mr-2 mt-1">•</span>
+                  <span className="text-[var(--text-secondary)]">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -189,8 +190,8 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
         {activeTab === 'code' && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Code Structure</h3>
-            <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm">
-              <pre className="text-gray-300">
+            <div className="bg-[var(--background-secondary)] rounded-lg p-4 font-mono text-sm theme-transition">
+              <pre className="text-[var(--text-secondary)]">
 {`project-structure/
 ├── src/
 │   ├── components/
@@ -210,13 +211,13 @@ export default function ProjectView({ projectId }: ProjectViewProps) {
               </pre>
             </div>
             
-            <div className="bg-gray-800 rounded-lg p-4">
+            <div className="bg-[var(--background-secondary)] rounded-lg p-4 theme-transition">
               <h4 className="font-semibold mb-2">Key Dependencies</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 {project.technologies.map((tech) => (
                   <div key={tech} className="flex justify-between">
-                    <span className="text-gray-300">{tech}</span>
-                    <span className="text-gray-500">latest</span>
+                    <span className="text-[var(--text-secondary)]">{tech}</span>
+                    <span className="text-[var(--text-muted)]">latest</span>
                   </div>
                 ))}
               </div>
