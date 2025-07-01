@@ -1,10 +1,28 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
+
 interface WelcomeViewProps {
   onOpenFile?: (fileId: string) => void;
 }
 
 export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
+  const [apiResponse, setApiResponse] = useState<string>('');
+
+  const callApi = async (endpoint: string) => {
+    try {
+      const response = await fetch(`/api/${endpoint}`);
+      const data = await response.json();
+      setApiResponse(JSON.stringify(data, null, 2));
+    } catch {
+      setApiResponse('Erro ao chamar API');
+    }
+  };
+
+  const testAboutApi = () => callApi('get-about');
+  const testProjectsApi = () => callApi('get-projects');
+  const testSkillsApi = () => callApi('get-skills');
   const profileData = {
     name: 'Vico',
     avatar: '/avatar.jpg',
@@ -15,6 +33,12 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
     { label: 'Projetos', action: () => onOpenFile?.('projects'), icon: '📁' },
     { label: 'Habilidades', action: () => onOpenFile?.('skills'), icon: '⚙️' },
     { label: 'Contato', action: () => onOpenFile?.('contact'), icon: '📧' },
+  ];
+
+  const apiActions = [
+    { label: 'API About', action: testAboutApi, icon: '📄' },
+    { label: 'API Projects', action: testProjectsApi, icon: '📁' },
+    { label: 'API Skills', action: testSkillsApi, icon: '⚙️' },
   ];
 
   const rightItems = [
@@ -38,9 +62,11 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
             </div>
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
               {profileData.avatar ? (
-                <img 
+                <Image 
                   src={profileData.avatar} 
                   alt={profileData.name}
+                  width={80}
+                  height={80}
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
@@ -56,6 +82,18 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
           <div className="flex-1 space-y-2">
             <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">Start</h2>
             {leftActions.map((item, index) => (
+              <button
+                key={index}
+                onClick={item.action}
+                className="w-full flex items-center space-x-3 p-2 text-left hover:bg-[var(--hover-bg)] rounded transition-colors group theme-transition"
+              >
+                <span className="text-base opacity-70 group-hover:opacity-100 text-[var(--accent-blue)]">{item.icon}</span>
+                <span className="text-[var(--accent-blue)] group-hover:text-[var(--text-primary)] font-light tracking-wide text-[16px]">{item.label}</span>
+              </button>
+            ))}
+            
+            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide mt-6">API Tests</h2>
+            {apiActions.map((item, index) => (
               <button
                 key={index}
                 onClick={item.action}
@@ -100,6 +138,14 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
             <span>🐙 github.com/seuusuario</span>
           </div>
         </div>
+
+        {/* API Response */}
+        {apiResponse && (
+          <div className="mt-8 p-4 bg-[var(--hover-bg)] rounded-lg border border-[var(--border)]">
+            <h3 className="text-sm font-semibold text-[var(--accent-blue)] mb-2">Resposta da API:</h3>
+            <pre className="text-xs text-[var(--text-primary)] whitespace-pre-wrap">{apiResponse}</pre>
+          </div>
+        )}
       </div>
     </div>
   );
