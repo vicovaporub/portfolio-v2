@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
 import PortfolioTab from "@/components/PortfolioTab";
 import WelcomeView from "@/components/WelcomeView";
@@ -15,7 +15,7 @@ interface Tab {
 export default function HomePage() {
   const [tabs, setTabs] = useState<Tab[]>([]);
 
-  const handleTabOpen = (newTab: Tab) => {
+  const handleTabOpen = useCallback((newTab: Tab) => {
     // Deactivate all existing tabs
     const updatedTabs = tabs.map(tab => ({ ...tab, isActive: false }));
     
@@ -31,28 +31,9 @@ export default function HomePage() {
     }
     
     setTabs(updatedTabs);
-  };
+  }, [tabs]);
 
-  const handleTabClose = (tabId: string) => {
-    const updatedTabs = tabs.filter(tab => tab.id !== tabId);
-    
-    // If we closed the active tab, activate the last remaining tab
-    if (updatedTabs.length > 0 && tabs.find(tab => tab.id === tabId)?.isActive) {
-      updatedTabs[updatedTabs.length - 1].isActive = true;
-    }
-    
-    setTabs(updatedTabs);
-  };
-
-  const handleTabActivate = (tabId: string) => {
-    const updatedTabs = tabs.map(tab => ({
-      ...tab,
-      isActive: tab.id === tabId
-    }));
-    setTabs(updatedTabs);
-  };
-
-  const handleWelcomeAction = (fileId: string) => {
+  const handleWelcomeAction = useCallback((fileId: string) => {
     // Create a tab based on the fileId from welcome view
     const tab: Tab = {
       id: fileId,
@@ -64,20 +45,55 @@ export default function HomePage() {
       isActive: true
     };
     handleTabOpen(tab);
-  };
+  }, [handleTabOpen]);
+
+  const handleTabClose = useCallback((tabId: string) => {
+    // Prevent closing the welcome tab
+    if (tabId === 'welcome') return;
+    
+    const updatedTabs = tabs.filter(tab => tab.id !== tabId);
+    
+    // If we closed the active tab, activate the welcome tab
+    if (tabs.find(tab => tab.id === tabId)?.isActive) {
+      const welcomeTab = updatedTabs.find(tab => tab.id === 'welcome');
+      if (welcomeTab) {
+        welcomeTab.isActive = true;
+      }
+    }
+    
+    setTabs(updatedTabs);
+  }, [tabs]);
+
+  const handleTabActivate = useCallback((tabId: string) => {
+    const updatedTabs = tabs.map(tab => ({
+      ...tab,
+      isActive: tab.id === tabId
+    }));
+    setTabs(updatedTabs);
+  }, [tabs]);
+
+  // Initialize with welcome tab on component mount
+  useEffect(() => {
+    if (tabs.length === 0) {
+      setTabs([
+        {
+          id: 'welcome',
+          title: 'welcome.tsx',
+          content: <WelcomeView onOpenFile={handleWelcomeAction} />,
+          isActive: true
+        }
+      ]);
+    }
+  }, [tabs.length, handleWelcomeAction]);
 
   return (
     <main className="flex h-screen">
       <Sidebar onTabOpen={handleTabOpen} />
-      {tabs.length > 0 ? (
-        <PortfolioTab 
-          tabs={tabs}
-          onTabClose={handleTabClose}
-          onTabActivate={handleTabActivate}
-        />
-      ) : (
-        <WelcomeView onOpenFile={handleWelcomeAction} />
-      )}
+      <PortfolioTab 
+        tabs={tabs}
+        onTabClose={handleTabClose}
+        onTabActivate={handleTabActivate}
+      />
     </main>
   );
 }
