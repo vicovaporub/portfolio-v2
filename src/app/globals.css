@@ -1,8 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f0f0;
+  --background-secondary: #ffffff;
+  --foreground: #2d3748;
+  --foreground-secondary: #4a5568;
+  --border: #d1d5db;
+  --sidebar-bg: #e5e7eb;
+  --sidebar-header-bg: #d1d5db;
+  --tab-bg: #e5e7eb;
+  --tab-active-bg: #ffffff;
+  --tab-border: #d1d5db;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --accent-blue: #3182ce;
+  --accent-blue-light: #ebf8ff;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
+  --hover-bg: #e5e7eb;
+}
+
+.dark {
+  --background: #18181b;
+  --background-secondary: #23232a;
+  --foreground: #f7fafc;
+  --foreground-secondary: #e2e8f0;
+  --border: #27272a;
+  --sidebar-bg: #23232a;
+  --sidebar-header-bg: #18181b;
+  --tab-bg: #23232a;
+  --tab-active-bg: #18181b;
+  --tab-border: #27272a;
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --accent-blue: #63b3ed;
+  --accent-blue-light: #2d3748;
+  --scrollbar-thumb: #27272a;
+  --scrollbar-thumb-hover: #52525b;
+  --hover-bg: #27272a;
 }
 
 @theme inline {
@@ -12,17 +49,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom scrollbar for the sidebar */
@@ -35,21 +66,26 @@ body {
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background: #424242;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #5a5a5a;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* VS Code-like selection */
 ::selection {
-  background: #264f78;
+  background: var(--accent-blue);
   color: #ffffff;
 }
 
 /* Custom font for code elements */
 .font-mono {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* Theme transition utilities */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
