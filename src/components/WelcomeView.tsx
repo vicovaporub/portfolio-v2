@@ -52,15 +52,15 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
   return (
     <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
       {/* Header - Title */}
-      <div className="flex-1 flex flex-col pt-24 pl-24 space-y-12">
+      <div className="flex-1 flex flex-col pt-8 md:pt-24 px-4 md:pl-24 space-y-8 md:space-y-12 w-full">
         {/* Main Title */}
         <div className="space-y-2">
-          <div className="flex items-end justify-between max-w-2xl">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between max-w-2xl w-full gap-4 md:gap-0">
             <div>
-              <h1 className="text-5xl font-light" style={{color: 'var(--accent-blue)'}}>{profileData.name}</h1>
-              <p className="text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">Portfolio Page</p>
+              <h1 className="text-3xl md:text-5xl font-light" style={{color: 'var(--accent-blue)'}}>{profileData.name}</h1>
+              <p className="text-base md:text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">Portfolio Page</p>
             </div>
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
               {profileData.avatar ? (
                 <Image 
                   src={profileData.avatar} 
@@ -77,7 +77,7 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex w-full max-w-4xl space-x-16 mt-6">
+        <div className="flex flex-col md:flex-row w-full max-w-4xl space-y-8 md:space-y-0 md:space-x-16 mt-4 md:mt-6">
           {/* Left Side - Actions */}
           <div className="flex-1 space-y-2">
             <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">Start</h2>
@@ -128,11 +128,11 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
         </div>
 
         {/* Footer - Quick Info */}
-        <div className="space-y-1 mt-8">
+        <div className="space-y-1 mt-6 md:mt-8">
           <p className="text-xs text-[var(--accent-blue)] font-light tracking-wide">
             Desenvolvedor Full Stack • React • TypeScript • Node.js
           </p>
-          <div className="flex space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide">
+          <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide gap-1 sm:gap-0">
             <span>📍 São Paulo, Brasil</span>
             <span>📧 seu.email@exemplo.com</span>
             <span>🐙 github.com/seuusuario</span>
@@ -141,7 +141,7 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
 
         {/* API Response */}
         {apiResponse && (
-          <div className="mt-8 p-4 bg-[var(--hover-bg)] rounded-lg border border-[var(--border)]">
+          <div className="mt-6 md:mt-8 p-4 bg-[var(--hover-bg)] rounded-lg border border-[var(--border)]">
             <h3 className="text-sm font-semibold text-[var(--accent-blue)] mb-2">Resposta da API:</h3>
             <pre className="text-xs text-[var(--text-primary)] whitespace-pre-wrap">{apiResponse}</pre>
           </div>

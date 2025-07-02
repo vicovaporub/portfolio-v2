@@ -87,13 +87,16 @@ export default function HomePage() {
   }, [tabs.length, handleWelcomeAction]);
 
   return (
-    <main className="flex h-screen">
-      <Sidebar onTabOpen={handleTabOpen} />
-      <PortfolioTab 
-        tabs={tabs}
-        onTabClose={handleTabClose}
-        onTabActivate={handleTabActivate}
-      />
+    <main className="flex flex-col md:flex-row min-h-screen w-full bg-[var(--background)]">
+      {/* Padding top no mobile para não ficar atrás do botão hambúrguer */}
+      <div className="md:contents pt-14 md:pt-0 flex-1 flex">
+        <Sidebar onTabOpen={handleTabOpen} />
+        <PortfolioTab 
+          tabs={tabs}
+          onTabClose={handleTabClose}
+          onTabActivate={handleTabActivate}
+        />
+      </div>
     </main>
   );
 }

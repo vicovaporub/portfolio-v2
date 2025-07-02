@@ -63,6 +63,7 @@ interface SidebarProps {
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['explorer', 'projects']));
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleItem = (itemId: string) => {
     const newExpanded = new Set(expandedItems);
@@ -148,32 +149,77 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
     );
   };
 
-  return (
-    <div className="w-60 h-screen bg-[var(--sidebar-bg)] border-r border-[var(--border)] flex flex-col font-mono theme-transition">
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
-        <div className="flex items-center space-x-2">
-          <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
-        </div>
-        <div className="flex items-center space-x-1">
-          <ThemeToggle />
-          <div className="w-4 h-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer flex items-center justify-center">
-            <span className="text-[10px]">⋮</span>
+  // Botão de menu hambúrguer para mobile
+  const HamburgerButton = (
+    <button
+      className="md:hidden fixed top-3 left-3 z-40 bg-[var(--sidebar-bg)] border border-[var(--border)] rounded p-2 shadow-lg"
+      onClick={() => setDrawerOpen(true)}
+      aria-label="Abrir menu"
+    >
+      <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--text-primary)]"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+    </button>
+  );
+
+  // Sidebar como drawer no mobile
+  const SidebarDrawer = (
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-200 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setDrawerOpen(false)}
+        aria-label="Fechar menu"
+      />
+      {/* Drawer */}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${drawerOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:z-0`}
+        style={{ minWidth: 0 }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
+          <div className="flex items-center space-x-2">
+            <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
+          </div>
+          <div className="flex items-center space-x-1">
+            <ThemeToggle />
+            {/* Botão de fechar só no mobile */}
+            <button
+              className="md:hidden w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              onClick={() => setDrawerOpen(false)}
+              aria-label="Fechar menu"
+            >
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="4" x2="16" y2="16" /><line x1="16" y1="4" x2="4" y2="16" /></svg>
+            </button>
+            <div className="hidden md:flex w-4 h-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer items-center justify-center">
+              <span className="text-[10px]">⋮</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto sidebar-scrollbar">
-        <div className="py-1">
-          {sidebarItems.map(item => renderItem(item))}
+        {/* Conteúdo */}
+        <div className="flex-1 overflow-y-auto sidebar-scrollbar">
+          <div className="py-1">
+            {sidebarItems.map(item => renderItem(item))}
+          </div>
         </div>
-      </div>
-
-      <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
-        <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
-          <span>Victor Castro</span>
-          <span>2025</span>
+        {/* Rodapé */}
+        <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
+          <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
+            <span>Victor Castro</span>
+            <span>2025</span>
+          </div>
         </div>
+      </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Botão hambúrguer só no mobile */}
+      {HamburgerButton}
+      {/* Sidebar como drawer no mobile, fixa no desktop */}
+      <div className="md:block">
+        {/* No mobile, drawer controlado pelo estado. No desktop, sidebar fixa. */}
+        {SidebarDrawer}
       </div>
-    </div>
+    </>
   );
 } 
