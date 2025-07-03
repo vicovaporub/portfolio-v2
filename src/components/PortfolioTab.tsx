@@ -1,19 +1,6 @@
 'use client';
 
-interface TabProps {
-  id: string;
-  title: string;
-  content: string | React.ReactNode;
-  isActive?: boolean;
-  onClose?: () => void;
-  onActivate?: () => void;
-}
-
-interface PortfolioTabProps {
-  tabs: TabProps[];
-  onTabClose?: (tabId: string) => void;
-  onTabActivate?: (tabId: string) => void;
-}
+import { PortfolioTabProps } from "@/types/tabs";
 
 export default function PortfolioTab({ tabs, onTabClose, onTabActivate }: PortfolioTabProps) {
   const getFileIcon = (title: string) => {

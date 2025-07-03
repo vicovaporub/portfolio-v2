@@ -4,13 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
 import PortfolioTab from "@/components/PortfolioTab";
 import WelcomeView from "@/components/WelcomeView";
-
-interface Tab {
-  id: string;
-  title: string;
-  content: string | React.ReactNode;
-  isActive: boolean;
-}
+import { Tab } from '@/types/tabs';
 
 export default function HomePage() {
   const [tabs, setTabs] = useState<Tab[]>([]);
@@ -90,7 +84,9 @@ export default function HomePage() {
     <main className="flex flex-col md:flex-row min-h-screen w-full bg-[var(--background)]">
       {/* Padding top no mobile para não ficar atrás do botão hambúrguer */}
       <div className="md:contents pt-14 md:pt-0 flex-1 flex">
-        <Sidebar onTabOpen={handleTabOpen} />
+        <Sidebar
+          onTabOpen={handleTabOpen}
+        />
         <PortfolioTab 
           tabs={tabs}
           onTabClose={handleTabClose}
