@@ -1,69 +1,72 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import ProjectView from './ProjectView';
 import ProjectsPage from '../pages/ProjectsPage';
 import ThemeToggle from './ThemeToggle';
-
-interface SidebarItem {
-  id: string;
-  label: string;
-  icon: string;
-  isActive?: boolean;
-  children?: SidebarItem[];
-}
-
-interface Tab {
-  id: string;
-  title: string;
-  content: string | React.ReactNode;
-  isActive: boolean;
-}
-
-const sidebarItems: SidebarItem[] = [
-  {
-    id: 'explorer',
-    label: 'VICTOR CASTRO',
-    icon: '📁',
-    isActive: true,
-    children: [
-      {
-        id: 'about',
-        label: 'about.md',
-        icon: '📄'
-      },
-      {
-        id: 'projects',
-        label: 'projects/',
-        icon: '📂',
-        children:
-        [
-          { id: 'project1', label: 'project-1.tsx', icon: '⚛️' },
-          { id: 'project2', label: 'project-2.tsx', icon: '⚛️' },
-          { id: 'project3', label: 'project-3.tsx', icon: '⚛️' },
-        ]
-      },
-      {
-        id: 'skills',
-        label: 'skills.json',
-        icon: '⚙️'
-      },
-      {
-        id: 'contact',
-        label: 'contact.ts',
-        icon: '📧'
-      },
-    ]
-  },
-];
-
-interface SidebarProps {
-  onTabOpen?: (tab: Tab) => void;
-}
+import { UserContext } from '@/contexts/UserContext';
+import { SidebarItem, SidebarProps } from '@/types/sidebar';
+import { Tab } from '@/types/tabs';
+import { Project } from '@/types/project';
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['explorer', 'projects']));
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['main-menu', 'projects']));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const { user } = useContext(UserContext)
+
+
+  useEffect(() => {
+    const fetchPortfolioData = async () => {
+      const projectsData = await fetch('/api/get-projects').then(res => res.json())
+
+      setProjects(projectsData.projects)
+
+    }
+    fetchPortfolioData();
+  }, []);
+
+  console.log(projects)
+
+  const sidebarItems: SidebarItem[] = useMemo<SidebarItem[]>(() => {
+    return [
+      {
+        id: 'nav-menu',
+        label: user?.name,
+        icon: '📁',
+        isActive: true,
+        children: [
+          {
+            id: 'about',
+            label: 'about.md',
+            icon: '📄'
+          },
+          {
+            id: 'projects',
+            label: 'projects/',
+            icon: '📂',
+            children: Array.isArray(projects)
+              ? projects.map((project: Project) => ({
+                  id: project?.id?.toString() ?? '',
+                  label: project?.title ?? '',
+                  icon: '⚛️'
+                }))
+              : []
+          },
+          {
+            id: 'skills',
+            label: 'skills.json',
+            icon: '📄'
+          },
+          {
+            id: 'contact',
+            label: 'contact.ts',
+            icon: '📧'
+          }
+        ]
+      }
+    ]
+  }, [projects, user]);
 
   const toggleItem = (itemId: string) => {
     const newExpanded = new Set(expandedItems);
@@ -89,7 +92,7 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       
       const tab: Tab = {
         id: item.id,
-        title: item.label,
+        title: item.label || '',
         content: content,
         isActive: true
       };
@@ -172,7 +175,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       {/* Drawer */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${drawerOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:z-0`}
-        style={{ minWidth: 0 }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
@@ -181,11 +183,11 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
           </div>
           <div className="flex items-center space-x-1">
             <ThemeToggle />
-            {/* Botão de fechar só no mobile */}
+            {/* Mobile close button */}
             <button
               className="md:hidden w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               onClick={() => setDrawerOpen(false)}
-              aria-label="Fechar menu"
+              aria-label="Close menu"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="4" x2="16" y2="16" /><line x1="16" y1="4" x2="4" y2="16" /></svg>
             </button>
@@ -194,16 +196,18 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
             </div>
           </div>
         </div>
-        {/* Conteúdo */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto sidebar-scrollbar">
           <div className="py-1">
             {sidebarItems.map(item => renderItem(item))}
           </div>
         </div>
-        {/* Rodapé */}
+        {/* Footer */}
         <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
           <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
-            <span>Victor Castro</span>
+            <span>
+              {user?.name}
+            </span>
             <span>2025</span>
           </div>
         </div>
@@ -213,11 +217,10 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
 
   return (
     <>
-      {/* Botão hambúrguer só no mobile */}
+      {/* Hamburger button - mobile only */}
       {HamburgerButton}
-      {/* Sidebar como drawer no mobile, fixa no desktop */}
+      {/* Sidebar as drawer on mobile, fixed on desktop */}
       <div className="md:block">
-        {/* No mobile, drawer controlado pelo estado. No desktop, sidebar fixa. */}
         {SidebarDrawer}
       </div>
     </>
