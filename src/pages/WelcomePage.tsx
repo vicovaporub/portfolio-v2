@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import { UserContext } from '@/contexts/UserContext';
 
@@ -9,35 +9,13 @@ interface WelcomePageProps {
 }
 
 export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
-  const [apiResponse, setApiResponse] = useState<string>('');
-
-  const callApi = async (endpoint: string) => {
-    try {
-      const response = await fetch(`/api/${endpoint}`);
-      const data = await response.json();
-      setApiResponse(JSON.stringify(data, null, 2));
-    } catch {
-      setApiResponse('Erro ao chamar API');
-    }
-  };
-
   const { user, projects } = useContext(UserContext)
-
-  const testAboutApi = () => callApi('get-about');
-  const testProjectsApi = () => callApi('get-projects');
-  const testSkillsApi = () => callApi('get-skills');
 
   const leftActions = [
     { label: 'Sobre', action: () => onOpenFile?.('about'), icon: '📄' },
     { label: 'Projetos', action: () => onOpenFile?.('projects'), icon: '📁' },
     { label: 'Habilidades', action: () => onOpenFile?.('skills'), icon: '⚙️' },
     { label: 'Contato', action: () => onOpenFile?.('contact'), icon: '📧' },
-  ];
-
-  const apiActions = [
-    { label: 'API About', action: testAboutApi, icon: '📄' },
-    { label: 'API Projects', action: testProjectsApi, icon: '📁' },
-    { label: 'API Skills', action: testSkillsApi, icon: '⚙️' },
   ];
 
   const rightItems = [
@@ -90,18 +68,6 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                 <span className="text-[var(--accent-blue)] group-hover:text-[var(--text-primary)] font-light tracking-wide text-[16px]">{item.label}</span>
               </button>
             ))}
-            
-            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide mt-6">API Tests</h2>
-            {apiActions.map((item, index) => (
-              <button
-                key={index}
-                onClick={item.action}
-                className="w-full flex items-center space-x-3 p-2 text-left hover:bg-[var(--hover-bg)] rounded transition-colors group theme-transition"
-              >
-                <span className="text-base opacity-70 group-hover:opacity-100 text-[var(--accent-blue)]">{item.icon}</span>
-                <span className="text-[var(--accent-blue)] group-hover:text-[var(--text-primary)] font-light tracking-wide text-[16px]">{item.label}</span>
-              </button>
-            ))}
           </div>
 
           {/* Right Side - Skills with Percentage Bars */}
@@ -136,14 +102,6 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
             <span>🐙 github.com/seuusuario</span>
           </div>
         </div>
-
-        {/* API Response */}
-        {apiResponse && (
-          <div className="mt-6 md:mt-8 p-4 bg-[var(--hover-bg)] rounded-lg border border-[var(--border)]">
-            <h3 className="text-sm font-semibold text-[var(--accent-blue)] mb-2">Resposta da API:</h3>
-            <pre className="text-xs text-[var(--text-primary)] whitespace-pre-wrap">{apiResponse}</pre>
-          </div>
-        )}
       </div>
     </div>
   );
