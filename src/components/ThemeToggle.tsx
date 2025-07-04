@@ -1,44 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    // Check localStorage for saved theme preference
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      // Check system preference
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      setTheme(systemTheme);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      // Update document class and localStorage when theme changes
-      document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add(theme);
-      localStorage.setItem('theme', theme);
-    }
-  }, [theme, mounted]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  if (!mounted) {
-    return (
-      <div className="w-8 h-8 rounded-md flex items-center justify-center">
-        <div className="w-4 h-4 bg-[var(--border)] rounded animate-pulse"></div>
-      </div>
-    );
-  }
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
