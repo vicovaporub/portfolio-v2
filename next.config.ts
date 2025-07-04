@@ -4,7 +4,9 @@ const nextConfig: NextConfig = {
   devIndicators: {
     position: 'bottom-right',
   },
-  /* config options here */
+  images: {
+    domains: [process.env.SUPABASE_IMG_PATH || ''],
+  },
 };
 
 export default nextConfig;
