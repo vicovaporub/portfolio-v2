@@ -9,6 +9,9 @@ import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
 import { Tab } from '@/types/tabs';
 import { Project } from '@/types/project';
+import AboutPage from "@/pages/AboutPage";
+import SkillsPage from "@/pages/SkillsPage";
+import ContactPage from "@/pages/ContactPage";
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu', 'projects']));
@@ -107,6 +110,12 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       } else if (item.type === 'project') {
         console.log(item)
         content = <ProjectPage projectId={item.id} />;
+      } else if (item.id === 'about') {
+        content = <AboutPage />;
+      } else if (item.id === 'skills') {
+        content = <SkillsPage />;
+      } else if (item.id === 'contact') {
+        content = <ContactPage />;
       } else {
         content = `# ${item.label}\n\nThis is a placeholder content for ${item.label}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
       }

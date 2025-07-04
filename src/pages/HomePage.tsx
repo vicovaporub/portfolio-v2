@@ -4,6 +4,9 @@ import { useState, useCallback, useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
 import PortfolioTab from "@/components/tabs/PortfolioTab";
 import WelcomePage from "@/pages/WelcomePage";
+import AboutPage from "@/pages/AboutPage";
+import SkillsPage from "@/pages/SkillsPage";
+import ContactPage from "@/pages/ContactPage";
 import { Tab } from '@/types/tabs';
 
 export default function HomePage() {
@@ -29,15 +32,50 @@ export default function HomePage() {
 
   const handleWelcomeAction = useCallback((fileId: string) => {
     // Create a tab based on the fileId from welcome view
-    const tab: Tab = {
-      id: fileId,
-      title: fileId === 'about' ? 'about.md' : 
-             fileId === 'projects' ? 'projects/' :
-             fileId === 'skills' ? 'skills.json' :
-             fileId === 'contact' ? 'contact.ts' : fileId,
-      content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-      isActive: true
-    };
+    let tab: Tab;
+    
+    switch (fileId) {
+      case 'about':
+        tab = {
+          id: fileId,
+          title: 'about.md',
+          content: <AboutPage />,
+          isActive: true
+        };
+        break;
+      case 'skills':
+        tab = {
+          id: fileId,
+          title: 'skills.json',
+          content: <SkillsPage />,
+          isActive: true
+        };
+        break;
+      case 'contact':
+        tab = {
+          id: fileId,
+          title: 'contact.ts',
+          content: <ContactPage />,
+          isActive: true
+        };
+        break;
+      case 'projects':
+        tab = {
+          id: fileId,
+          title: 'projects/',
+          content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+          isActive: true
+        };
+        break;
+      default:
+        tab = {
+          id: fileId,
+          title: fileId,
+          content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+          isActive: true
+        };
+    }
+    
     handleTabOpen(tab);
   }, [handleTabOpen]);
 
