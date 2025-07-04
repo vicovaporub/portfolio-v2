@@ -6,6 +6,7 @@ export interface SidebarItem {
     icon: string;
     isActive?: boolean;
     children?: SidebarItem[];
+    type?: string;
 }
 
 export interface SidebarProps {

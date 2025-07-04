@@ -9,4 +9,5 @@ export interface Project {
     link: string;
     repo_path: string;
     live_path: string;
+    type?: string;
 }
