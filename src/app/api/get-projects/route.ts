@@ -52,7 +52,6 @@ export async function GET() {
             live_path: 'https://www.google.com'
         }
     ]
-
     
     return NextResponse.json({ projects: mockProjects });
 } 

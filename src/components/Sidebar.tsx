@@ -1,74 +1,24 @@
 'use client';
 
-import { useContext, useEffect, useMemo, useState } from 'react';
-import ProjectView from './ProjectView';
+import { useContext, useEffect, useState } from 'react';
+import ProjectPage from '../pages/ProjectPage';
 import ProjectsPage from '../pages/ProjectsPage';
+import WelcomePage from '../pages/WelcomePage';
 import ThemeToggle from './ThemeToggle';
 import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
 import { Tab } from '@/types/tabs';
-import { Project } from '@/types/project';
+import { generateSidebarItems } from '@/lib/base';
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['main-menu', 'projects']));
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu', 'projects']));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const { user } = useContext(UserContext)
-
-
-  useEffect(() => {
-    const fetchPortfolioData = async () => {
-      const projectsData = await fetch('/api/get-projects').then(res => res.json())
-
-      setProjects(projectsData.projects)
-
-    }
-    fetchPortfolioData();
-  }, []);
-
-  console.log(projects)
-
-  const sidebarItems: SidebarItem[] = useMemo<SidebarItem[]>(() => {
-    return [
-      {
-        id: 'nav-menu',
-        label: user?.name,
-        icon: '📁',
-        isActive: true,
-        children: [
-          {
-            id: 'about',
-            label: 'about.md',
-            icon: '📄'
-          },
-          {
-            id: 'projects',
-            label: 'projects/',
-            icon: '📂',
-            children: Array.isArray(projects)
-              ? projects.map((project: Project) => ({
-                  id: project?.id?.toString() ?? '',
-                  label: project?.title ?? '',
-                  icon: '⚛️'
-                }))
-              : []
-          },
-          {
-            id: 'skills',
-            label: 'skills.json',
-            icon: '📄'
-          },
-          {
-            id: 'contact',
-            label: 'contact.ts',
-            icon: '📧'
-          }
-        ]
-      }
-    ]
-  }, [projects, user]);
+  const sidebarItems: SidebarItem[] = generateSidebarItems(projects, user)
 
   const toggleItem = (itemId: string) => {
+    if (itemId === 'nav-menu') return;
     const newExpanded = new Set(expandedItems);
     if (newExpanded.has(itemId)) {
       newExpanded.delete(itemId);
@@ -81,15 +31,55 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   const handleItemClick = (item: SidebarItem) => {
     if (onTabOpen) {
       let content: string | React.ReactNode;
-      
+
+      if (item.id === 'nav-menu') {
+        // Função wrapper para converter fileId em Tab
+        const handleWelcomeAction = (fileId: string) => {
+          const tab: Tab = {
+            id: fileId,
+            title: fileId === 'about' ? 'about.md' : 
+                   fileId === 'projects' ? 'projects/' :
+                   fileId === 'skills' ? 'skills.json' :
+                   fileId === 'contact' ? 'contact.ts' : fileId,
+            content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+            isActive: true
+          };
+          onTabOpen(tab);
+        };
+        
+        content = <WelcomePage onOpenFile={handleWelcomeAction} />;
+        const tab: Tab = {
+          id: 'welcome',
+          title: 'welcome.tsx',
+          content: content,
+          isActive: true
+        };
+        onTabOpen(tab);
+        return;
+      }
+
+      // Lógica especial para projects/
       if (item.id === 'projects') {
-        content = <ProjectsPage />;
-      } else if (item.id.startsWith('project')) {
-        content = <ProjectView projectId={item.id} />;
+        const isProjectsOpen = expandedItems.has('projects');
+        if (!isProjectsOpen) {
+          content = <ProjectsPage />;
+          const tab: Tab = {
+            id: item.id,
+            title: item.label || '',
+            content: content,
+            isActive: true
+          };
+          onTabOpen(tab);
+        }
+        // Sempre alterna o menu
+        toggleItem(item.id);
+        return;
+      } else if (item.type === 'project') {
+        console.log(item)
+        content = <ProjectPage projectId={item.id} />;
       } else {
         content = `# ${item.label}\n\nThis is a placeholder content for ${item.label}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
       }
-      
       const tab: Tab = {
         id: item.id,
         title: item.label || '',
@@ -100,9 +90,22 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
     }
   };
 
+  useEffect(() => {
+    const fetchPortfolioData = async () => {
+      const projectsData = await fetch('/api/get-projects').then(res => res.json())
+
+      setProjects(projectsData.projects)
+
+    }
+    fetchPortfolioData();
+  }, []);
+
+
+
   const renderItem = (item: SidebarItem, depth: number = 0) => {
     const hasChildren = item.children && item.children.length > 0;
-    const isExpanded = expandedItems.has(item.id);
+
+    const isExpanded = item.id === 'nav-menu' ? true : expandedItems.has(item.id);
     const isActive = item.isActive;
 
     return (
@@ -119,15 +122,17 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
           `}
           onClick={() => {
             if (hasChildren) {
-              toggleItem(item.id);
-              // Also open tab for folders
+              // nav-menu não alterna
+              if (item.id !== 'nav-menu') toggleItem(item.id);
+              // Lógica de abrir tab para projects/ já está em handleItemClick
               handleItemClick(item);
             } else {
               handleItemClick(item);
             }
           }}
         >
-          {hasChildren && (
+          {/* Só mostra seta se não for nav-menu */}
+          {hasChildren && item.id !== 'nav-menu' && (
             <span className={`mr-1.5 text-[8px] transition-transform duration-150 ${isExpanded ? 'rotate-90' : ''}`}>
               ▶
             </span>
@@ -142,7 +147,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
             {item.label}
           </span>
         </div>
-        
         {hasChildren && isExpanded && (
           <div className="ml-1 border-l border-[var(--border)]/30">
             {item.children!.map(child => renderItem(child, depth + 1))}
