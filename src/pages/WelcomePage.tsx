@@ -21,7 +21,8 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
     }
   };
 
-  const { user } = useContext(UserContext)
+  const { user, projects } = useContext(UserContext)
+
   const testAboutApi = () => callApi('get-about');
   const testProjectsApi = () => callApi('get-projects');
   const testSkillsApi = () => callApi('get-skills');
