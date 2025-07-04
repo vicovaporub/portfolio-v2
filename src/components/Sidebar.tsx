@@ -1,17 +1,17 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import ProjectPage from '../pages/ProjectPage';
-import ProjectsPage from '../pages/ProjectsPage';
-import WelcomePage from '../pages/WelcomePage';
+import ProjectPage from '../views/ProjectPage';
+import ProjectsPage from '../views/ProjectsPage';
+import WelcomePage from '../views/WelcomePage';
 import ThemeToggle from './ThemeToggle';
 import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
 import { Tab } from '@/types/tabs';
 import { Project } from '@/types/project';
-import AboutPage from "@/pages/AboutPage";
-import SkillsPage from "@/pages/SkillsPage";
-import ContactPage from "@/pages/ContactPage";
+import AboutPage from "@/views/AboutPage";
+import SkillsPage from "@/views/SkillsPage";
+import ContactPage from "@/views/ContactPage";
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu', 'projects']));
@@ -65,68 +65,99 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   };
 
   const handleItemClick = (item: SidebarItem) => {
-    if (onTabOpen) {
-      let content: string | React.ReactNode;
+    if (!onTabOpen) return;
+    let content: string | React.ReactNode;
 
-      if (item.id === 'nav-menu') {
-        const handleWelcomeAction = (fileId: string) => {
-          const tab: Tab = {
-            id: fileId,
-            title: fileId === 'about' ? 'about.md' : 
-                   fileId === 'projects' ? 'projects/' :
-                   fileId === 'skills' ? 'skills.json' :
-                   fileId === 'contact' ? 'contact.ts' : fileId,
-            content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-            isActive: true
-          };
-          onTabOpen(tab);
-        };
-        
-        content = <WelcomePage onOpenFile={handleWelcomeAction} />;
-        const tab: Tab = {
-          id: 'welcome',
-          title: 'welcome.tsx',
-          content: content,
-          isActive: true
-        };
-        onTabOpen(tab);
-        return;
-      }
-
-      if (item.id === 'projects') {
-        const isProjectsOpen = expandedItems.has('projects');
-        if (!isProjectsOpen) {
-          content = <ProjectsPage />;
-          const tab: Tab = {
-            id: item.id,
-            title: item.label || '',
-            content: content,
-            isActive: true
-          };
-          onTabOpen(tab);
+    if (item.id === 'nav-menu') {
+      // WelcomePage pode abrir arquivos
+      const handleWelcomeAction = (fileId: string) => {
+        let tab: Tab;
+        switch (fileId) {
+          case 'about':
+            tab = {
+              id: fileId,
+              title: 'about.md',
+              content: <AboutPage />, 
+              isActive: true
+            };
+            break;
+          case 'skills':
+            tab = {
+              id: fileId,
+              title: 'skills.json',
+              content: <SkillsPage />, 
+              isActive: true
+            };
+            break;
+          case 'contact':
+            tab = {
+              id: fileId,
+              title: 'contact.ts',
+              content: <ContactPage />, 
+              isActive: true
+            };
+            break;
+          case 'projects':
+            tab = {
+              id: fileId,
+              title: 'projects/',
+              content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+              isActive: true
+            };
+            break;
+          default:
+            tab = {
+              id: fileId,
+              title: fileId,
+              content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+              isActive: true
+            };
         }
-        toggleItem(item.id);
-        return;
-      } else if (item.type === 'project') {
-        console.log(item)
-        content = <ProjectPage projectId={item.id} />;
-      } else if (item.id === 'about') {
-        content = <AboutPage />;
-      } else if (item.id === 'skills') {
-        content = <SkillsPage />;
-      } else if (item.id === 'contact') {
-        content = <ContactPage />;
-      } else {
-        content = `# ${item.label}\n\nThis is a placeholder content for ${item.label}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
-      }
+        onTabOpen(tab);
+      };
+      content = <WelcomePage onOpenFile={handleWelcomeAction} />;
       const tab: Tab = {
-        id: item.id,
-        title: item.label || '',
+        id: 'welcome',
+        title: 'welcome.tsx',
         content: content,
         isActive: true
       };
       onTabOpen(tab);
+      return;
     }
+
+    if (item.id === 'projects') {
+      const isProjectsOpen = expandedItems.has('projects');
+      if (!isProjectsOpen) {
+        content = <ProjectsPage />;
+        const tab: Tab = {
+          id: item.id,
+          title: item.label || '',
+          content: content,
+          isActive: true
+        };
+        onTabOpen(tab);
+      }
+      toggleItem(item.id);
+      return;
+    } else if (item.type === 'project') {
+      content = <ProjectPage projectId={item.id} />;
+    } else if (item.id === 'about') {
+      content = <AboutPage />;
+    } else if (item.id === 'skills') {
+      content = <SkillsPage />;
+    } else if (item.id === 'contact') {
+      content = <ContactPage />;
+    } else {
+      content = `# ${item.label}\n\nThis is a placeholder content for ${item.label}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+    }
+    const tab: Tab = {
+      id: item.id,
+      title: item.label || '',
+      content: content,
+      isActive: true
+    };
+    onTabOpen(tab);
   };
 
   const renderItem = (item: SidebarItem, depth: number = 0) => {

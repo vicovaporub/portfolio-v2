@@ -1,4 +1,4 @@
-import { getProjects } from '@/backend/controllers/projectsController';
+// import { getProjects } from '@/backend/controllers/projectsController';
 import { Project } from '@/types/project';
 import { NextResponse } from 'next/server';
 
