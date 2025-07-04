@@ -1,22 +1,26 @@
+import { Project } from "@/types/project";
 import { User } from "@/types/user";
 import { createContext, useEffect, useState } from "react";
 
-//create a context for the user data from the HomePage
-export const UserContext = createContext<{ user?: User }>({ user: undefined });
+export const UserContext = createContext<{ user?: User; projects?: Project[] }>({ user: undefined, projects: undefined });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User>()
+    const [projects, setProjects] = useState<Project[]>()
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const userData = await fetch('/api/get-user').then(res => res.json())
+        const fetchData = async () => {
+            const [userData, projectsData] = await Promise.all([
+                fetch('/api/get-user').then(res => res.json()),
+                fetch('/api/get-projects').then(res => res.json())
+            ])
             setUser(userData.userData)
+            setProjects(projectsData.projects)
         }
-        fetchUserData()
+        fetchData()
     }, [])
-
     return (
-        <UserContext.Provider value={{ user }}>
+        <UserContext.Provider value={{ user, projects }}>
             {children}
         </UserContext.Provider>
     )

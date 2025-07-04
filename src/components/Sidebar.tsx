@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import ProjectPage from '../pages/ProjectPage';
 import ProjectsPage from '../pages/ProjectsPage';
 import WelcomePage from '../pages/WelcomePage';
@@ -8,14 +8,47 @@ import ThemeToggle from './ThemeToggle';
 import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
 import { Tab } from '@/types/tabs';
-import { generateSidebarItems } from '@/lib/base';
+import { Project } from '@/types/project';
 
 export default function Sidebar({ onTabOpen }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu', 'projects']));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const { user } = useContext(UserContext)
-  const sidebarItems: SidebarItem[] = generateSidebarItems(projects, user)
+  const { user, projects } = useContext(UserContext)
+
+  const sidebarItems: SidebarItem[] = [{
+    id: 'nav-menu',
+    label: user?.name,
+    icon: '📁',
+    isActive: true,
+    children: [
+      {
+        id: 'about',
+        label: 'about.md',
+        icon: '📄'
+      },
+      {
+        id: 'projects',
+        label: 'projects/',
+        icon: '📂',
+        children: projects?.map((project: Project) => ({
+          id: project?.id?.toString() ?? '',
+          label: project?.title ?? '',
+          icon: '⚛️',
+          type: 'project'
+        }))
+      },
+      {
+        id: 'skills',
+        label: 'skills.json',
+        icon: '📄'
+      },
+      {
+        id: 'contact',
+        label: 'contact.ts',
+        icon: '📧'
+      }
+    ]
+  }]
 
   const toggleItem = (itemId: string) => {
     if (itemId === 'nav-menu') return;
@@ -33,7 +66,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       let content: string | React.ReactNode;
 
       if (item.id === 'nav-menu') {
-        // Função wrapper para converter fileId em Tab
         const handleWelcomeAction = (fileId: string) => {
           const tab: Tab = {
             id: fileId,
@@ -58,7 +90,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
         return;
       }
 
-      // Lógica especial para projects/
       if (item.id === 'projects') {
         const isProjectsOpen = expandedItems.has('projects');
         if (!isProjectsOpen) {
@@ -71,7 +102,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
           };
           onTabOpen(tab);
         }
-        // Sempre alterna o menu
         toggleItem(item.id);
         return;
       } else if (item.type === 'project') {
@@ -89,18 +119,6 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       onTabOpen(tab);
     }
   };
-
-  useEffect(() => {
-    const fetchPortfolioData = async () => {
-      const projectsData = await fetch('/api/get-projects').then(res => res.json())
-
-      setProjects(projectsData.projects)
-
-    }
-    fetchPortfolioData();
-  }, []);
-
-
 
   const renderItem = (item: SidebarItem, depth: number = 0) => {
     const hasChildren = item.children && item.children.length > 0;
