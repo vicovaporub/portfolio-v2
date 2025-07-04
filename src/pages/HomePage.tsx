@@ -13,22 +13,35 @@ export default function HomePage() {
   const [tabs, setTabs] = useState<Tab[]>([]);
 
   const handleTabOpen = useCallback((newTab: Tab) => {
-    // Deactivate all existing tabs
-    const updatedTabs = tabs.map(tab => ({ ...tab, isActive: false }));
-    
-    // Check if tab already exists
-    const existingTabIndex = updatedTabs.findIndex(tab => tab.id === newTab.id);
-    
-    if (existingTabIndex >= 0) {
-      // Activate existing tab
-      updatedTabs[existingTabIndex].isActive = true;
-    } else {
-      // Add new tab
-      updatedTabs.push(newTab);
-    }
-    
-    setTabs(updatedTabs);
-  }, [tabs]);
+    setTabs(prevTabs => {
+      // Deactivate all existing tabs (including welcome)
+      const updatedTabs = prevTabs.map(tab => ({ 
+        ...tab, 
+        isActive: false 
+      }));
+      
+      // Check if tab already exists
+      const existingTabIndex = updatedTabs.findIndex(tab => tab.id === newTab.id);
+      
+      if (existingTabIndex >= 0) {
+        // Activate existing tab
+        updatedTabs[existingTabIndex].isActive = true;
+      } else {
+        // Add new tab
+        updatedTabs.push(newTab);
+      }
+      
+      // Ensure welcome tab is always first
+      const welcomeTab = updatedTabs.find(tab => tab.id === 'welcome');
+      const otherTabs = updatedTabs.filter(tab => tab.id !== 'welcome');
+      
+      if (welcomeTab) {
+        return [welcomeTab, ...otherTabs];
+      } else {
+        return updatedTabs;
+      }
+    });
+  }, []);
 
   const handleWelcomeAction = useCallback((fileId: string) => {
     // Create a tab based on the fileId from welcome view
@@ -83,40 +96,48 @@ export default function HomePage() {
     // Prevent closing the welcome tab
     if (tabId === 'welcome') return;
     
-    const updatedTabs = tabs.filter(tab => tab.id !== tabId);
-    
-    // If we closed the active tab, activate the welcome tab
-    if (tabs.find(tab => tab.id === tabId)?.isActive) {
-      const welcomeTab = updatedTabs.find(tab => tab.id === 'welcome');
-      if (welcomeTab) {
-        welcomeTab.isActive = true;
+    setTabs(prevTabs => {
+      const updatedTabs = prevTabs.filter(tab => tab.id !== tabId);
+      
+      // If we closed the active tab, activate the welcome tab
+      if (prevTabs.find(tab => tab.id === tabId)?.isActive) {
+        const welcomeTab = updatedTabs.find(tab => tab.id === 'welcome');
+        if (welcomeTab) {
+          welcomeTab.isActive = true;
+        }
       }
-    }
-    
-    setTabs(updatedTabs);
-  }, [tabs]);
+      
+      return updatedTabs;
+    });
+  }, []);
 
   const handleTabActivate = useCallback((tabId: string) => {
-    const updatedTabs = tabs.map(tab => ({
+    setTabs(prevTabs => prevTabs.map(tab => ({
       ...tab,
       isActive: tab.id === tabId
-    }));
-    setTabs(updatedTabs);
-  }, [tabs]);
+    })));
+  }, []);
 
   // Initialize with welcome tab on component mount
   useEffect(() => {
-    if (tabs.length === 0) {
-      setTabs([
-        {
+    setTabs(prevTabs => {
+      // Always ensure welcome tab exists
+      const welcomeTabExists = prevTabs.find(tab => tab.id === 'welcome');
+      
+      if (!welcomeTabExists) {
+        const welcomeTab = {
           id: 'welcome',
           title: 'welcome.tsx',
           content: <WelcomePage onOpenFile={handleWelcomeAction} />,
-          isActive: true
-        }
-      ]);
-    }
-  }, [tabs.length, handleWelcomeAction]);
+          isActive: prevTabs.length === 0 ? true : false
+        };
+        
+        return [welcomeTab, ...prevTabs];
+      }
+      
+      return prevTabs;
+    });
+  }, [handleWelcomeAction]);
 
   return (
     <main className="flex flex-col md:flex-row min-h-screen w-full bg-[var(--background)]">

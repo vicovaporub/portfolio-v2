@@ -9,7 +9,7 @@ interface WelcomePageProps {
 }
 
 export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
-  const { user, projects } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const leftActions = [
     { label: 'Sobre', action: () => onOpenFile?.('about'), icon: '📄' },
