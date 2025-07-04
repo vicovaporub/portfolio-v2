@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Image from 'next/image';
+import { UserContext } from '@/contexts/UserContext';
 
-interface WelcomeViewProps {
+interface WelcomePageProps {
   onOpenFile?: (fileId: string) => void;
 }
 
-export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
+export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
   const [apiResponse, setApiResponse] = useState<string>('');
 
   const callApi = async (endpoint: string) => {
@@ -20,13 +21,10 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
     }
   };
 
+  const { user } = useContext(UserContext)
   const testAboutApi = () => callApi('get-about');
   const testProjectsApi = () => callApi('get-projects');
   const testSkillsApi = () => callApi('get-skills');
-  const profileData = {
-    name: 'Vico',
-    avatar: '/avatar.jpg',
-  };
 
   const leftActions = [
     { label: 'Sobre', action: () => onOpenFile?.('about'), icon: '📄' },
@@ -57,20 +55,20 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
         <div className="space-y-2">
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between max-w-2xl w-full gap-4 md:gap-0">
             <div>
-              <h1 className="text-3xl md:text-5xl font-light" style={{color: 'var(--accent-blue)'}}>{profileData.name}</h1>
+              <h1 className="text-3xl md:text-5xl font-light">{user?.name}</h1>
               <p className="text-base md:text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">Portfolio Page</p>
             </div>
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
-              {profileData.avatar ? (
+              {user?.image_path ? (
                 <Image 
-                  src={profileData.avatar} 
-                  alt={profileData.name}
+                  src={user?.image_path} 
+                  alt={user?.name ?? ''}
                   width={80}
                   height={80}
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                profileData.name.charAt(0)
+                user?.name
               )}
             </div>
           </div>
@@ -118,7 +116,6 @@ export default function WelcomeView({ onOpenFile }: WelcomeViewProps) {
                   <div className="w-full bg-[var(--border)] rounded-full h-1.5">
                     <div 
                       className="bg-[var(--accent-blue)] h-1.5 rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: `${item.percentage}%` }}
                     ></div>
                   </div>
                 </div>

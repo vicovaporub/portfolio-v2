@@ -14,13 +14,13 @@ interface ProjectData {
   features: string[];
 }
 
-interface ProjectViewProps {
+interface ProjectPageProps {
   projectId: string;
 }
 
 const projectData: Record<string, ProjectData> = {
-  'project1': {
-    id: 'project1',
+  '1': {
+    id: '1',
     title: 'E-commerce Platform',
     description: 'A full-stack e-commerce platform built with Next.js, TypeScript, and Tailwind CSS. Features include user authentication, product management, shopping cart, and payment integration.',
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'PostgreSQL', 'Stripe'],
@@ -36,8 +36,8 @@ const projectData: Record<string, ProjectData> = {
       'Responsive design for all devices'
     ]
   },
-  'project2': {
-    id: 'project2',
+  '2': {
+    id: '2',
     title: 'Task Management App',
     description: 'A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.',
     technologies: ['React', 'Node.js', 'Socket.io', 'MongoDB', 'Express', 'Material-UI'],
@@ -53,8 +53,8 @@ const projectData: Record<string, ProjectData> = {
       'Mobile-responsive design'
     ]
   },
-  'project3': {
-    id: 'project3',
+  '3': {
+    id: '3',
     title: 'Weather Dashboard',
     description: 'A weather application that provides current weather conditions, forecasts, and interactive maps using weather APIs.',
     technologies: ['Vue.js', 'Vuex', 'Axios', 'Chart.js', 'OpenWeather API', 'Vuetify'],
@@ -72,7 +72,7 @@ const projectData: Record<string, ProjectData> = {
   }
 };
 
-export default function ProjectView({ projectId }: ProjectViewProps) {
+export default function ProjectPage({ projectId }: ProjectPageProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'code'>('overview');
   const project = projectData[projectId];
 

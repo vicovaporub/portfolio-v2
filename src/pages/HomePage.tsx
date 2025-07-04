@@ -2,8 +2,8 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Sidebar from "@/components/Sidebar";
-import PortfolioTab from "@/components/PortfolioTab";
-import WelcomeView from "@/components/WelcomeView";
+import PortfolioTab from "@/components/tabs/PortfolioTab";
+import WelcomePage from "@/pages/WelcomePage";
 import { Tab } from '@/types/tabs';
 
 export default function HomePage() {
@@ -73,7 +73,7 @@ export default function HomePage() {
         {
           id: 'welcome',
           title: 'welcome.tsx',
-          content: <WelcomeView onOpenFile={handleWelcomeAction} />,
+          content: <WelcomePage onOpenFile={handleWelcomeAction} />,
           isActive: true
         }
       ]);
