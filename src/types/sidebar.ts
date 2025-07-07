@@ -11,5 +11,7 @@ export interface SidebarItem {
 
 export interface SidebarProps {
     onTabOpen?: (tab: Tab) => void;
+    expandedItems?: Set<string>;
+    setExpandedItems?: (items: Set<string>) => void;
 }
   

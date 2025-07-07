@@ -4,14 +4,25 @@ import { useTabs } from '@/hooks/useTabs';
 import Sidebar from "@/components/Sidebar";
 import PortfolioTab from "@/components/tabs/PortfolioTab";
 import WelcomePage from "@/views/WelcomePage";
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { Tab } from '@/types/tabs';
 import AboutPage from "@/views/AboutPage";
 import SkillsPage from "@/views/SkillsPage";
 import ContactPage from "@/views/ContactPage";
+import ProjectsPage from './ProjectsPage';
 
 export default function HomePage() {
   const { tabs, openTab, closeTab, activateTab } = useTabs();
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu']));
+
+  // Função para recolher um item
+  const collapseItem = (itemId: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(itemId);
+      return newSet;
+    });
+  };
 
   // Função para abrir tabs a partir do WelcomePage
   const handleWelcomeAction = useCallback((fileId: string) => {
@@ -45,7 +56,7 @@ export default function HomePage() {
         tab = {
           id: fileId,
           title: 'projects/',
-          content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+          content: <ProjectsPage />, 
           isActive: true
         };
         break;
@@ -72,16 +83,26 @@ export default function HomePage() {
     }
   }, [tabs.length, openTab, handleWelcomeAction]);
 
+  // Função para fechar tab e recolher item na sidebar
+  const handleTabClose = (tabId: string) => {
+    closeTab(tabId);
+    if (tabId === 'projects') {
+      collapseItem('projects');
+    }
+  };
+
   return (
     <main className="flex flex-col md:flex-row min-h-screen w-full bg-[var(--background)]">
       {/* Padding top no mobile para não ficar atrás do botão hambúrguer */}
       <div className="md:contents pt-14 md:pt-0 flex-1 flex">
         <Sidebar
           onTabOpen={openTab}
+          expandedItems={expandedItems}
+          setExpandedItems={setExpandedItems}
         />
         <PortfolioTab 
           tabs={tabs}
-          onTabClose={closeTab}
+          onTabClose={handleTabClose}
           onTabActivate={activateTab}
         />
       </div>
