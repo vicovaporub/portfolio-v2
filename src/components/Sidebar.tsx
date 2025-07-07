@@ -3,7 +3,6 @@
 import { useContext, useState } from 'react';
 import ProjectPage from '../views/ProjectPage';
 import ProjectsPage from '../views/ProjectsPage';
-import WelcomePage from '../views/WelcomePage';
 import ThemeToggle from './ThemeToggle';
 import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
@@ -13,8 +12,7 @@ import AboutPage from "@/views/AboutPage";
 import SkillsPage from "@/views/SkillsPage";
 import ContactPage from "@/views/ContactPage";
 
-export default function Sidebar({ onTabOpen }: SidebarProps) {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['nav-menu', 'projects']));
+export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: SidebarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { user, projects } = useContext(UserContext)
 
@@ -54,6 +52,7 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   }]
 
   const toggleItem = (itemId: string) => {
+    if (!expandedItems || !setExpandedItems) return;
     if (itemId === 'nav-menu') return;
     const newExpanded = new Set(expandedItems);
     if (newExpanded.has(itemId)) {
@@ -66,68 +65,12 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
 
   const handleItemClick = (item: SidebarItem) => {
     if (!onTabOpen) return;
+    if (item.id === 'nav-menu') return;
     let content: string | React.ReactNode;
 
-    if (item.id === 'nav-menu') {
-      // WelcomePage pode abrir arquivos
-      const handleWelcomeAction = (fileId: string) => {
-        let tab: Tab;
-        switch (fileId) {
-          case 'about':
-            tab = {
-              id: fileId,
-              title: 'about.md',
-              content: <AboutPage />, 
-              isActive: true
-            };
-            break;
-          case 'skills':
-            tab = {
-              id: fileId,
-              title: 'skills.json',
-              content: <SkillsPage />, 
-              isActive: true
-            };
-            break;
-          case 'contact':
-            tab = {
-              id: fileId,
-              title: 'contact.ts',
-              content: <ContactPage />, 
-              isActive: true
-            };
-            break;
-          case 'projects':
-            tab = {
-              id: fileId,
-              title: 'projects/',
-              content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-              isActive: true
-            };
-            break;
-          default:
-            tab = {
-              id: fileId,
-              title: fileId,
-              content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-              isActive: true
-            };
-        }
-        onTabOpen(tab);
-      };
-      content = <WelcomePage onOpenFile={handleWelcomeAction} />;
-      const tab: Tab = {
-        id: 'welcome',
-        title: 'welcome.tsx',
-        content: content,
-        isActive: true
-      };
-      onTabOpen(tab);
-      return;
-    }
-
+    // Remover lógica de reabrir a tab welcome manualmente
     if (item.id === 'projects') {
-      const isProjectsOpen = expandedItems.has('projects');
+      const isProjectsOpen = expandedItems?.has('projects');
       if (!isProjectsOpen) {
         content = <ProjectsPage />;
         const tab: Tab = {
@@ -163,7 +106,7 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
   const renderItem = (item: SidebarItem, depth: number = 0) => {
     const hasChildren = item.children && item.children.length > 0;
 
-    const isExpanded = item.id === 'nav-menu' ? true : expandedItems.has(item.id);
+    const isExpanded = item.id === 'nav-menu' ? true : expandedItems?.has(item.id);
     const isActive = item.isActive;
 
     return (
@@ -287,4 +230,4 @@ export default function Sidebar({ onTabOpen }: SidebarProps) {
       </div>
     </>
   );
-} 
+}

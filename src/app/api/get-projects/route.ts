@@ -13,7 +13,7 @@ export async function GET() {
             title: 'Project 1',
             description: 'Description 1',
             company: 'Company 1',
-            image_path: 'https://via.placeholder.com/150',
+            image_path: '/',
             link: 'https://www.google.com',
             repo_path: 'https://www.google.com',
             live_path: 'https://www.google.com'
@@ -24,7 +24,7 @@ export async function GET() {
             title: 'Project 2',
             description: 'Description 2',
             company: 'Company 2',
-            image_path: 'https://via.placeholder.com/150',
+            image_path: '/',
             link: 'https://www.google.com',
             repo_path: 'https://www.google.com',
             live_path: 'https://www.google.com'
@@ -35,7 +35,7 @@ export async function GET() {
             title: 'Project 3',
             description: 'Description 3',
             company: 'Company 3',
-            image_path: 'https://via.placeholder.com/150',
+            image_path: '/',
             link: 'https://www.google.com',
             repo_path: 'https://www.google.com',
             live_path: 'https://www.google.com'
@@ -46,7 +46,7 @@ export async function GET() {
             title: 'Project 4',
             description: 'Description 4',
             company: 'Company 4',
-            image_path: 'https://via.placeholder.com/150',
+            image_path: '/',
             link: 'https://www.google.com',
             repo_path: 'https://www.google.com',
             live_path: 'https://www.google.com'
