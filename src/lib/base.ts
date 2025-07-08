@@ -1,7 +1,6 @@
 import { Locale } from '@/types/locale';
 
 export function parseLocalizedText(text: string, languageTag: Locale): string {
-
   if (!text.includes('^^')) {
     return text;
   }
@@ -11,8 +10,8 @@ export function parseLocalizedText(text: string, languageTag: Locale): string {
 
   for (let i = 1; i < parts.length; i++) {
     const [lang, ...content] = parts[i].split(':');
-    if (lang === languageTag) {
-      return content.join(':');
+    if (lang.trim() === languageTag) {
+      return content.join(':').trim();
     }
   }
 

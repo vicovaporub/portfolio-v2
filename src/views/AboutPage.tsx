@@ -28,9 +28,11 @@ export default function AboutPage() {
     <div className="p-4">
       <div className="bg-[var(--background-secondary)] rounded border border-[var(--border)] p-6 theme-transition">
         <div className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed">
-          <Markdown>
-            {getLocalizedText(aboutData?.text ?? '', locale)}
-          </Markdown>
+          <div className="flex flex-col gap-4">
+            <Markdown>
+              {getLocalizedText(aboutData?.text ?? '', locale)}
+            </Markdown>
+          </div>
         </div>
       </div>
     </div>
