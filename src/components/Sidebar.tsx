@@ -133,7 +133,6 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
             }
           }}
         >
-          {/* Só mostra seta se não for nav-menu */}
           {hasChildren && item.id !== 'nav-menu' && (
             <span className={`mr-1.5 text-[8px] transition-transform duration-150 ${isExpanded ? 'rotate-90' : ''}`}>
               ▶
@@ -158,7 +157,6 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
     );
   };
 
-  // Botão de menu hambúrguer para mobile
   const HamburgerButton = (
     <button
       className="md:hidden fixed top-3 left-3 z-40 bg-[var(--sidebar-bg)] border border-[var(--border)] rounded p-2 shadow-lg"
@@ -169,20 +167,16 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
     </button>
   );
 
-  // Sidebar como drawer no mobile
   const SidebarDrawer = (
     <>
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-200 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setDrawerOpen(false)}
         aria-label="Fechar menu"
       />
-      {/* Drawer */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${drawerOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:z-0`}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
           <div className="flex items-center space-x-2">
             <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
@@ -203,13 +197,11 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
             </div>
           </div>
         </div>
-        {/* Content */}
         <div className="flex-1 overflow-y-auto sidebar-scrollbar">
           <div className="py-1">
             {sidebarItems.map(item => renderItem(item))}
           </div>
         </div>
-        {/* Footer */}
         <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
           <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
             <span>
@@ -224,9 +216,7 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
 
   return (
     <>
-      {/* Hamburger button - mobile only */}
       {HamburgerButton}
-      {/* Sidebar as drawer on mobile, fixed on desktop */}
       <div className="md:block">
         {SidebarDrawer}
       </div>

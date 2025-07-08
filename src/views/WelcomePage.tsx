@@ -3,19 +3,24 @@
 import { useContext } from 'react';
 import Image from 'next/image';
 import { UserContext } from '@/contexts/UserContext';
+import { getLocalizedText, portfolioTexts } from '@/lib/base';
+import { useLocale } from '@/hooks/useLocale';
 
 interface WelcomePageProps {
   onOpenFile?: (fileId: string) => void;
 }
 
+const { menu } = portfolioTexts
+
 export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
   const { user } = useContext(UserContext)
+  const { locale } = useLocale()
 
   const leftActions = [
-    { label: 'Sobre', action: () => onOpenFile?.('about'), icon: '📄' },
-    { label: 'Projetos', action: () => onOpenFile?.('projects'), icon: '📁' },
-    { label: 'Habilidades', action: () => onOpenFile?.('skills'), icon: '⚙️' },
-    { label: 'Contato', action: () => onOpenFile?.('contact'), icon: '📧' },
+    { label: getLocalizedText(menu.menuItem.about, locale), action: () => onOpenFile?.('about'), icon: '📄' },
+    { label: getLocalizedText(menu.menuItem.projects, locale), action: () => onOpenFile?.('projects'), icon: '📁' },
+    { label: getLocalizedText(menu.menuItem.skills, locale), action: () => onOpenFile?.('skills'), icon: '⚙️' },
+    { label: getLocalizedText(menu.menuItem.contact, locale), action: () => onOpenFile?.('contact'), icon: '📧' },
   ];
 
   const rightItems = [
@@ -35,7 +40,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between max-w-2xl w-full gap-4 md:gap-0">
             <div>
               <h1 className="text-3xl md:text-5xl font-light">{user?.name}</h1>
-              <p className="text-base md:text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">Portfolio Page</p>
+              <p className="text-base md:text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">{getLocalizedText(portfolioTexts.pages.welcome.title, locale)}</p>
             </div>
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
               {user?.image_path ? (
@@ -57,7 +62,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
         <div className="flex flex-col md:flex-row w-full max-w-4xl space-y-8 md:space-y-0 md:space-x-16 mt-4 md:mt-6">
           {/* Left Side - Actions */}
           <div className="flex-1 space-y-2">
-            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">Start</h2>
+            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">{getLocalizedText(portfolioTexts.menu.menuLabel, locale)}</h2>
             {leftActions.map((item, index) => (
               <button
                 key={index}
@@ -72,7 +77,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
 
           {/* Right Side - Skills with Percentage Bars */}
           <div className="flex-1 space-y-2">
-            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">Skills</h2>
+            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">{getLocalizedText(portfolioTexts.pages.welcome.mostUsedSkills, locale)}</h2>
             <div className="space-y-2">
               {rightItems.map((item, index) => (
                 <div key={index} className="space-y-1">
