@@ -15,7 +15,7 @@ export function parseLocalizedText(text: string, languageTag: Locale): string {
       return content.join(':');
     }
   }
- 
+
   return mainText; 
 }
 
