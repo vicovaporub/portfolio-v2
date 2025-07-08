@@ -56,15 +56,12 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initializeLocales = async () => {
       try {
-        // Fetch available locales first
         const locales = await fetchAvailableLocales();
         setAvailableLocales(locales);
-        
-        // Then determine initial locale
+
         const savedLocale = localStorage.getItem('locale') as Locale;
         const detectedLocale = detectBrowserLocale(locales);
         
-        // Use saved locale if it's still available, otherwise use detected
         const initialLocale = (savedLocale && locales.includes(savedLocale)) 
           ? savedLocale 
           : detectedLocale;
@@ -80,6 +77,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
     initializeLocales();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang =  locale;
+  }, [locale]);
+
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale, isLoading, availableLocales }}>
