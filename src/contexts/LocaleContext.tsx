@@ -16,8 +16,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const localesData = await response.json();
         const locales = localesData.activeLocales
-          .filter((locale: LocaleData) => locale.active)
-          .map((locale: LocaleData) => locale.languageTag);
+          .map((locale: LocaleData) => locale.language_tag);
         return locales;
       }
     } catch (error) {

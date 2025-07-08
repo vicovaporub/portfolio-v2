@@ -9,7 +9,7 @@ export interface LocaleContextType {
 
 export interface LocaleData {
   id: number;
-  languageTag: Locale;
+  language_tag: Locale;
   name: string;
   active: boolean;
 } 
