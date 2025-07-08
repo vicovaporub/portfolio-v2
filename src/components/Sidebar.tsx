@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import ProjectPage from '../views/ProjectPage';
 import ProjectsPage from '../views/ProjectsPage';
 import ThemeToggle from './ThemeToggle';
+import LanguageToggle from './LanguageToggle';
 import { UserContext } from '@/contexts/UserContext';
 import { SidebarItem, SidebarProps } from '@/types/sidebar';
 import { Tab } from '@/types/tabs';
@@ -187,6 +188,7 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
             <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
           </div>
           <div className="flex items-center space-x-1">
+            <LanguageToggle />
             <ThemeToggle />
             {/* Mobile close button */}
             <button
