@@ -4,4 +4,12 @@ export interface LocaleContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   isLoading: boolean;
+  availableLocales: Locale[];
+}
+
+export interface LocaleData {
+  id: number;
+  languageTag: Locale;
+  name: string;
+  active: boolean;
 } 
