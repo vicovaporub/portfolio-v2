@@ -1,7 +1,7 @@
 'use client';
 
 import { useTabs } from '@/hooks/useTabs';
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import PortfolioTab from "@/components/tabs/PortfolioTab";
 import WelcomePage from "@/views/WelcomePage";
 import { useEffect, useCallback, useState } from 'react';

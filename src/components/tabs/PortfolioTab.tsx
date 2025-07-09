@@ -31,22 +31,21 @@ export default function PortfolioTab({ tabs, onTabClose, onTabActivate }: Portfo
         </div>
       );
     }
-    
-    // If it's a React component, render it directly
     return content;
   };
 
   return (
     <div className="flex-1 flex flex-col bg-[var(--background)] theme-transition">
       {/* Tab Bar */}
-      <div className="flex bg-[var(--tab-bg)] border-b border-[var(--tab-border)] min-h-[35px] theme-transition">
+      <div className="flex flex-wrap bg-[var(--tab-bg)] min-h-[35px] theme-transition">
         {tabs.map((tab) => (
           <div
             key={tab.id}
             className={`
               flex items-center px-4 py-2 cursor-pointer transition-all duration-150 select-none theme-transition
+              border border-[var(--tab-border)]
               ${tab.isActive 
-                ? 'bg-[var(--tab-active-bg)] text-[var(--text-primary)] border-r border-[var(--tab-border)]' 
+                ? 'bg-[var(--tab-active-bg)] text-[var(--text-primary)]' 
                 : 'bg-[var(--tab-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--hover-bg)]'
               }
             `}
@@ -71,9 +70,14 @@ export default function PortfolioTab({ tabs, onTabClose, onTabActivate }: Portfo
 
       {/* Tab Content */}
       <div className="flex-1 overflow-auto sidebar-scrollbar">
-        {tabs.find(tab => tab.isActive) && (
-          renderContent(tabs.find(tab => tab.isActive)?.content)
-        )}
+        {tabs.map(tab => (
+          <div
+            key={tab.id}
+            className={tab.isActive ? '' : 'hidden'}
+          >
+            {renderContent(tab.content)}
+          </div>
+        ))}
       </div>
     </div>
   );

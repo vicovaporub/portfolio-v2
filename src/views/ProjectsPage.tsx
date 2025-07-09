@@ -1,5 +1,5 @@
 'use client'
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from '../components/cards/ProjectCard';
 import { UserContext } from '@/contexts/UserContext';
 import { useContext } from 'react';
 
