@@ -8,7 +8,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="w-8 h-8 rounded-md flex items-center justify-center transition-all duration-200 hover:bg-[var(--hover-bg)]"
+      className="w-8 h-8 cursor-pointer active:scale-95 rounded-md flex items-center justify-center border border-[var(--border)] bg-[var(--background-secondary)] text-[var(--text-primary)] shadow-sm transition-all theme-transition duration-200 hover:bg-[var(--hover-bg)] outline-none"
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
       {theme === 'light' ? (

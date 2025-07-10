@@ -36,7 +36,7 @@ export default function LanguageToggle() {
     <div className="relative h-8 flex items-center min-w-[72px]" ref={dropdownRef}>
       <button
         type="button"
-        className="h-8 w-[88px] min-w-[72px] px-4 pr-8 text-xs font-mono rounded-md border border-[var(--border)] bg-[var(--background-secondary)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--accent-blue)] focus:border-[var(--accent-blue)] transition-all theme-transition cursor-pointer flex items-center justify-between gap-2 shadow-sm outline-none"
+        className="h-8 w-[88px] min-w-[72px] px-4 pr-8 text-xs font-mono rounded-md border border-[var(--border)] bg-[var(--background-secondary)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--accent-blue)]  transition-all theme-transition cursor-pointer flex items-center justify-between gap-2 shadow-sm outline-none"
         onClick={() => setOpen((v) => !v)}
         title="Select language"
       >
@@ -45,7 +45,7 @@ export default function LanguageToggle() {
       </button>
       {open && (
         <ul
-          className="absolute left-0 top-11 z-20 w-[88px] min-w-[72px] bg-[var(--background-secondary)] border border-[var(--border)] rounded-md shadow-lg mt-1 flex flex-col theme-transition animate-fade-in"
+          className="absolute left-0 top-full z-20 w-[88px] min-w-[72px] bg-[var(--background-secondary)] border border-[var(--border)] rounded-md shadow-lg mt-1 flex flex-col theme-transition animate-fade-in"
         >
           {availableLocales.map((loc, idx) => {
             const isFirst = idx === 0;
