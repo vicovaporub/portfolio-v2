@@ -12,7 +12,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const fetchData = async () => {
             const [userData, projectsData] = await Promise.all([
                 fetch('/api/get-user').then(res => res.json()),
-                fetch('/api/get-projects').then(res => res.json())
+                fetch('/api/get-project-array').then(res => res.json())
             ])
             setUser(userData.userData)
             setProjects(projectsData.projects)

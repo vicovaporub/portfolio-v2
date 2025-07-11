@@ -74,8 +74,6 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
     if (!onTabOpen) return;
     if (item.id === 'nav-menu') return;
     let content: string | React.ReactNode;
-
-    // Remover lógica de reabrir a tab welcome manualmente
     if (item.id === 'projects') {
       const isProjectsOpen = expandedItems?.has('projects');
       if (!isProjectsOpen) {
@@ -91,7 +89,10 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
       toggleItem(item.id);
       return;
     } else if (item.type === 'project') {
-      content = <ProjectPage projectId={item.id} />;
+      const project = projects?.find(project => project.id === item.id);
+      if (project) {
+        content = <ProjectPage project={project} />;
+      }
     } else if (item.id === 'about') {
       content = <AboutPage />;
     } else if (item.id === 'skills') {
