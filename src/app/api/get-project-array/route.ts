@@ -8,7 +8,6 @@ export async function GET() {
     projects.forEach(project => {
         project.type = 'project';
     });
-    console.log(projects)
 
     return NextResponse.json({ projects });
 }
