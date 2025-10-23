@@ -13,10 +13,13 @@ import ContactPage from "@/views/ContactPage";
 import SidebarDrawer from './SidebarDrawer';
 import SidebarItem from './SidebarItem';
 import MobileHeader from './MobileHeader';
+import { getLocalizedText } from '@/lib/base';
+import { useLocale } from '@/hooks/useLocale';
 
 export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: SidebarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { user, projects } = useContext(UserContext)
+  const { locale } = useLocale()
 
   const sidebarItems: SidebarItemType[] = [{
     id: 'nav-menu',
@@ -45,7 +48,7 @@ export default function Sidebar({ onTabOpen, expandedItems, setExpandedItems }: 
         icon: '📂',
         children: projects?.map((project: Project) => ({
           id: project?.id?.toString() ?? '',
-          label: project?.title ?? '',
+          label: getLocalizedText(project?.title, locale) ?? '',
           icon: '⚛️',
           type: 'project'
         }))
