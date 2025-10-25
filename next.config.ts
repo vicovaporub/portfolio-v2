@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   devIndicators: {
-    position: 'bottom-right',
+    position: "bottom-right",
   },
   images: {
-    domains: [process.env.SUPABASE_IMG_PATH || ''],
+    remotePatterns: [{ hostname: process.env.SUPABASE_IMG_PATH || "" }],
   },
 };
 
