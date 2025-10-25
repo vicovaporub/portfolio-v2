@@ -15,15 +15,6 @@ export default function PortfolioTab({
     return "📄";
   };
 
-  const getFileColor = (title: string) => {
-    if (title.endsWith(".md")) return "text-[var(--accent-blue)]";
-    if (title.endsWith(".tsx") || title.endsWith(".ts"))
-      return "text-[var(--accent-blue)]";
-    if (title.endsWith(".json")) return "text-[var(--text-secondary)]";
-    if (title.endsWith("/")) return "text-[var(--text-secondary)]";
-    return "text-[var(--text-secondary)]";
-  };
-
   const renderContent = (content: string | React.ReactNode) => {
     if (typeof content === "string") {
       return (
@@ -63,7 +54,7 @@ export default function PortfolioTab({
             <span
               className={`flex-1 min-w-0 truncate text-[11px] font-mono ${
                 tab.isActive
-                  ? getFileColor(tab.title)
+                  ? "text-[var(--accent-blue)]"
                   : "text-[var(--text-secondary)]"
               }`}
             >
