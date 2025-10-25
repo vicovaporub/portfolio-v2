@@ -8,7 +8,7 @@ export const UserService = {
             .from('portfolio_user')
             .select('*')
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     }

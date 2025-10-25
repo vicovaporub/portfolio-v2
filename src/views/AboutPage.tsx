@@ -11,30 +11,30 @@ interface AboutData {
 }
 
 export default function AboutPage() {
-  const [aboutData, setAboutData] = useState<AboutData | null>(null)
-  const { locale } = useLocale()
+    const [aboutData, setAboutData] = useState<AboutData | null>(null)
+    const { locale } = useLocale()
 
-  useEffect(() => {
-    const getAboutData = async () => {
-      const response = await fetch('/api/get-about')
-      const data = await response.json()
-      setAboutData(data.aboutContent)
-    }
-    getAboutData()
-  }, []) 
+    useEffect(() => {
+        const getAboutData = async () => {
+            const response = await fetch('/api/get-about')
+            const data = await response.json()
+            setAboutData(data.aboutContent)
+        }
+        getAboutData()
+    }, []) 
 
 
-  return (
-    <div className="p-4">
-      <div className="bg-[var(--background-secondary)] rounded border border-[var(--border)] p-6 theme-transition">
-        <div className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed">
-          <div className="flex flex-col gap-4">
-            <Markdown>
-              {getLocalizedText(aboutData?.text ?? '', locale)}
-            </Markdown>
-          </div>
+    return (
+        <div className="p-4">
+            <div className="bg-[var(--background-secondary)] rounded border border-[var(--border)] p-6 theme-transition">
+                <div className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed">
+                    <div className="flex flex-col gap-4">
+                        <Markdown>
+                            {getLocalizedText(aboutData?.text ?? '', locale)}
+                        </Markdown>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

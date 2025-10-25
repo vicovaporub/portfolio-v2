@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  devIndicators: {
-    position: "bottom-right",
-  },
-  images: {
-    remotePatterns: [{ hostname: process.env.SUPABASE_IMG_PATH || "" }],
-  },
+    devIndicators: {
+        position: "bottom-right",
+    },
+    images: {
+        remotePatterns: [{ hostname: process.env.SUPABASE_IMG_PATH || "" }],
+    },
 };
 
 export default nextConfig;

@@ -9,7 +9,7 @@ export const AboutService = {
             .select('*')
             .single()
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     },

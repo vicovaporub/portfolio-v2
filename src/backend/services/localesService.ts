@@ -9,7 +9,7 @@ export const LocalesService = {
             .select('*')
             .eq('active', true)
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     },
@@ -20,7 +20,7 @@ export const LocalesService = {
             .select('*')
             .eq('tag', tag)
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     },
@@ -30,7 +30,7 @@ export const LocalesService = {
             .from('portfolio_locales')
             .select('*')
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     }

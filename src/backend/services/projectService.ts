@@ -8,7 +8,7 @@ export const ProjectService = {
             .from('portfolio_projects')
             .select('*')
         
-            if (error) throw error;
+        if (error) throw error;
         
         return data;
     },
@@ -20,7 +20,7 @@ export const ProjectService = {
             .eq('id', id)
             .single()
 
-            if (error) throw error;
+        if (error) throw error;
 
         return data;
     },
