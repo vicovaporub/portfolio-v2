@@ -11,7 +11,7 @@ export default function SidebarItem({
     const hasChildren = item.children && item.children.length > 0;
     const isActive = item.isActive;
     const depthPadding =
-    depth <= 0 ? "pl-2" : depth === 1 ? "pl-5" : depth === 2 ? "pl-8" : "pl-11";
+    depth <= 0 ? "pl-2" : depth === 1 ? "pl-2" : depth === 2 ? "pl-4" : "pl-11";
 
     return (
         <div>

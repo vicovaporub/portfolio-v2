@@ -30,7 +30,7 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
             
                     </div>
                 </div>
-                {/* Mobile close button */}
+
                 <button
                     className="md:hidden absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                     onClick={onClose}
