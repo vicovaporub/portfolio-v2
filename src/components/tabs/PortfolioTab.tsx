@@ -52,7 +52,7 @@ export default function PortfolioTab({
               ${
                 tab.isActive
                   ? "bg-[var(--tab-active-bg)] text-[var(--text-primary)]"
-                  : "bg-[var(--tab-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-secondary)]"
+                  : "bg-[var(--tab-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--tab-hover-bg)]"
               }
             `}
             onClick={() => onTabActivate?.(tab.id)}
@@ -61,9 +61,11 @@ export default function PortfolioTab({
               {getFileIcon(tab.title)}
             </span>
             <span
-              className={`flex-1 min-w-0 truncate text-[11px] font-mono ${getFileColor(
-                tab.title
-              )}`}
+              className={`flex-1 min-w-0 truncate text-[11px] font-mono ${
+                tab.isActive
+                  ? getFileColor(tab.title)
+                  : "text-[var(--text-secondary)]"
+              }`}
             >
               {tab.title}
             </span>
