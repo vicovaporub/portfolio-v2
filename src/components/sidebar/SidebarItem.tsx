@@ -11,7 +11,7 @@ export default function SidebarItem({
     const hasChildren = item.children && item.children.length > 0;
     const isActive = item.isActive;
     const depthPadding =
-    depth <= 0 ? "pl-2" : depth === 1 ? "pl-2" : depth === 2 ? "pl-4" : "pl-11";
+    depth <= 0 ? "pl-2" : depth === 1 ? "pl-4" : depth === 2 ? "pl-6" : "pl-11";
 
     return (
         <div>
@@ -35,10 +35,10 @@ export default function SidebarItem({
                     }
                 }}
             >
-                {hasChildren && item.id !== "nav-menu" && (
+                {hasChildren && (
                     <span
                         className={`mr-1.5 text-[8px] transition-transform duration-150 ${
-                            isExpanded ? "rotate-90" : ""
+                            item.id === "nav-menu" || isExpanded ? "rotate-90" : ""
                         }`}
                     >
                         <svg
