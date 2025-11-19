@@ -39,7 +39,7 @@ export default function PortfolioTab({
                         className={`
               flex items-center px-4 py-2 cursor-default transition-all duration-150 select-none theme-transition
               border border-[var(--tab-border)]
-              w-[150px]
+              w-[155px]
               ${
                     tab.isActive
                         ? "bg-[var(--tab-active-bg)] text-[var(--text-primary)]"
