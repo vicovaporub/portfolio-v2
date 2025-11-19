@@ -2,7 +2,6 @@ import { Project } from "@/types/project";
 import Image from "next/image";
 
 const ProjectCard = ({ project }: { project: Project }) => {
-    console.log(project);
     return (
         <div className="border border-[var(--border)] rounded-xl shadow-lg p-4 md:p-6 max-w-xs w-full bg-[var(--background-secondary)] flex flex-col items-center gap-2 md:gap-4 hover:bg-[var(--hover-bg)] transition-colors duration-200 theme-transition">
             <div className="w-full h-28 md:h-40 overflow-hidden rounded-lg flex items-center justify-center bg-[var(--border)]">

@@ -1,3 +1,4 @@
+import { Technology } from "./technology";
 
 export interface Project {
     id: string | number;
@@ -11,4 +12,5 @@ export interface Project {
     live_path: string;
     slug: string;
     type?: string;
+    technologies?: Technology[];
 }

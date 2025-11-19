@@ -6,7 +6,6 @@ import { useContext } from 'react';
 const ProjectsPage = () => {
     const { projects } = useContext(UserContext)
 
-
     return (
         <div className="p-4 md:p-6 bg-[var(--background)] text-[var(--text-primary)] theme-transition">
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Projects</h1>

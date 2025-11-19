@@ -1,8 +1,8 @@
-import { getProjectsArray } from "@/backend/controllers/projectsController";
+import { getProjectsArrayWithTechnologies } from "@/backend/controllers/projectsController";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    const projects = await getProjectsArray();
+    const projects = await getProjectsArrayWithTechnologies() 
 
     projects.sort((a, b) => b.number - a.number);
     projects.forEach((project) => {

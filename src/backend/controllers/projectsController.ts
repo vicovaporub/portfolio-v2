@@ -14,3 +14,10 @@ export const getProjectById = async (id: string) => {
 
     return project;
 }
+
+export const getProjectsArrayWithTechnologies = async () => {
+
+    const projects = await ProjectService.getProjectsArrayWithTechnologies()
+
+    return projects;
+}
