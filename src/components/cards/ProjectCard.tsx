@@ -20,15 +20,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 {project.description}
             </p>
             <div className="flex gap-1 md:gap-2 flex-wrap justify-center">
-                <span className="bg-[var(--border)] text-[var(--text-secondary)] rounded-md px-2 md:px-3 py-1 text-xs md:text-sm border border-[var(--border)]">
-          React
-                </span>
-                <span className="bg-[var(--border)] text-[var(--text-secondary)] rounded-md px-2 md:px-3 py-1 text-xs md:text-sm border border-[var(--border)]">
-          TypeScript
-                </span>
-                <span className="bg-[var(--border)] text-[var(--text-secondary)] rounded-md px-2 md:px-3 py-1 text-xs md:text-sm border border-[var(--border)]">
-          CSS
-                </span>
+                {project.technologies?.map((technology) => (
+                    <span key={technology.id} className="bg-[var(--border)] text-[var(--text-secondary)] rounded-md px-2 md:px-3 py-1 text-xs md:text-sm border border-[var(--border)]">
+                        {technology.name}
+                    </span>
+                ))}
             </div>
         </div>
     );
