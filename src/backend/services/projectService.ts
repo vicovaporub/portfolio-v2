@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import type { Technology } from "../../types/technology";
 
 
 export const ProjectService = {
@@ -27,7 +28,7 @@ export const ProjectService = {
 
         const projects = data.map((project) => {
             const technologies = project.portfolio_project_technologies.map(
-                t => t.portfolio_technologies
+                (t: { portfolio_technologies: Technology }) => t.portfolio_technologies
             );
             delete project.portfolio_project_technologies;
             return { ...project, technologies };
