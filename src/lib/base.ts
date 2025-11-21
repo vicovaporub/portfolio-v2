@@ -45,7 +45,9 @@ export const portfolioTexts = {
     pages: {
         welcome: {
             title: 'Portfolio page ^^pt-BR:Página de Portfólio',
-            mostUsedSkills: 'Most used skills ^^pt-BR:Habilidades mais usadas',
+            mostUsedSkills: 'Most used skills by project ^^pt-BR:Habilidades mais usadas por projeto',
+            showMore: 'Show more ^^pt-BR:Mostrar mais',
+            showLess: 'Show less ^^pt-BR:Mostrar menos',
         },
         about: {
             title: 'About ^^pt-BR:Sobre',
