@@ -10,6 +10,10 @@ import AboutPage from "@/views/AboutPage";
 import SkillsPage from "@/views/SkillsPage";
 import ContactPage from "@/views/ContactPage";
 import ProjectsPage from "./ProjectsPage";
+import ProjectPage from "@/views/ProjectPage";
+import { Project } from "@/types/project";
+import { useLocale } from "@/hooks/useLocale";
+import { getLocalizedText } from "@/lib/base";
 
 export default function HomePage() {
     const { tabs, openTab, closeTab, activateTab } = useTabs();
@@ -17,6 +21,7 @@ export default function HomePage() {
         new Set(["nav-menu"])
     );
     const activeTabId = tabs.find((t) => t.isActive)?.id;
+    const { locale } = useLocale();
 
     // Função para recolher um item
     const collapseItem = (itemId: string) => {
@@ -60,7 +65,15 @@ export default function HomePage() {
                 tab = {
                     id: fileId,
                     title: "projects/",
-                    content: <ProjectsPage />,
+                    content: <ProjectsPage onOpenProject={(project: Project) => {
+                        const projectTab: Tab = {
+                            id: project.id.toString(),
+                            title: getLocalizedText(project.title, locale),
+                            content: <ProjectPage project={project} />,
+                            isActive: true,
+                        };
+                        openTab(projectTab);
+                    }} />,
                     isActive: true,
                 };
                 break;
@@ -74,7 +87,7 @@ export default function HomePage() {
             }
             openTab(tab);
         },
-        [openTab]
+        [openTab, locale]
     );
 
     useEffect(() => {

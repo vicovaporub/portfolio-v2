@@ -26,6 +26,17 @@ export default function Sidebar({
     const { user, projects } = useContext(UserContext);
     const { locale } = useLocale();
 
+    const handleOpenProject = (project: Project) => {
+        if (!onTabOpen) return;
+        const tab: Tab = {
+            id: project.id.toString(),
+            title: getLocalizedText(project.title, locale),
+            content: <ProjectPage project={project} />,
+            isActive: true,
+        };
+        onTabOpen(tab);
+    };
+
     const sidebarItems: SidebarItemType[] = [
         {
             id: "nav-menu",
@@ -93,7 +104,7 @@ export default function Sidebar({
         if (item.id === "projects") {
             const isProjectsOpen = expandedItems?.has("projects");
             if (!isProjectsOpen) {
-                content = <ProjectsPage />;
+                content = <ProjectsPage onOpenProject={handleOpenProject} />;
                 const tab: Tab = {
                     id: item.id,
                     title: item.label || "",

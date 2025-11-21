@@ -2,8 +2,9 @@
 import ProjectCard from '../components/cards/ProjectCard';
 import { UserContext } from '@/contexts/UserContext';
 import { useContext } from 'react';
+import { Project } from '@/types/project';
 
-const ProjectsPage = () => {
+const ProjectsPage = ({ onOpenProject }: { onOpenProject?: (project: Project) => void }) => {
     const { projects } = useContext(UserContext)
 
     return (
@@ -12,7 +13,7 @@ const ProjectsPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {projects?.map((project) => {
                     return (
-                        <ProjectCard key={project.id} project={project} />
+                        <ProjectCard key={project.id} project={project} onOpenProject={onOpenProject} />
                     )
                 })}
             </div>
