@@ -3,6 +3,10 @@ import Image from "next/image";
 import Badge from "@/components/badge";
 
 const ProjectCard = ({ project }: { project: Project }) => {
+    const technologies = project.technologies ?? [];
+    const displayedTechnologies = technologies.slice(0, 4);
+    const remainingTechnologiesCount = technologies.length - displayedTechnologies.length;
+
     return (
         <div className="border border-[var(--border)] rounded-xl shadow-lg p-3  w-full bg-[var(--background-secondary)] hover:bg-[var(--hover-bg)] transition-colors duration-200 theme-transition flex flex-col md:flex-row items-start gap-3 md:gap-4 md:h-45 overflow-hidden">
             <div className="w-full md:w-40 h-28 md:h-full overflow-hidden rounded-lg flex items-center justify-center bg-[var(--border)] flex-shrink-0">
@@ -24,9 +28,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     </p>
                 </div>
                 <div className="flex gap-1 md:gap-2 flex-wrap">
-                    {project.technologies?.map((technology) => (
+                    {displayedTechnologies.map((technology) => (
                         <Badge key={technology.id}>{technology.name}</Badge>
                     ))}
+                    {remainingTechnologiesCount > 0 && (
+                        <Badge key="more">+{remainingTechnologiesCount}</Badge>
+                    )}
                 </div>
             </div>
         </div>
