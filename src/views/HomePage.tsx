@@ -98,9 +98,9 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex flex-col md:flex-row min-h-screen w-full bg-[var(--background)]">
+        <main className="flex flex-col md:flex-row h-screen min-h-0 w-full bg-[var(--background)] overflow-hidden">
             {/* Padding top no mobile para não ficar atrás do botão hambúrguer */}
-            <div className="md:contents pt-14 md:pt-0 flex-1 flex">
+            <div className="md:contents pt-14 md:pt-0 flex-1 flex min-h-0">
                 <Sidebar
                     onTabOpen={openTab}
                     expandedItems={expandedItems}

@@ -18,7 +18,7 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
                 aria-label="Fechar menu"
             />
             <aside
-                className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:z-0`}
+                className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:min-h-0 md:z-0`}
             >
                 <div className="hidden md:flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
                     <div className="flex items-center space-x-2">
@@ -41,7 +41,7 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
                         <line x1="16" y1="4" x2="4" y2="16" />
                     </svg>
                 </button>
-                <div className="flex-1 overflow-y-auto sidebar-scrollbar">
+                <div className="flex-1 min-h-0 overflow-y-auto sidebar-scrollbar">
                     <div className="py-1 md:pt-0 pt-16">
                         {children}
                     </div>

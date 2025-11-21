@@ -31,7 +31,7 @@ export default function PortfolioTab({
     };
 
     return (
-        <div className="flex-1 flex flex-col bg-[var(--background)] theme-transition">
+        <div className="flex-1 min-h-0 flex flex-col bg-[var(--background)] theme-transition">
             <div className="flex flex-wrap bg-[var(--tab-bg)] min-h-[35px] theme-transition">
                 {tabs.map((tab) => (
                     <div
@@ -76,7 +76,7 @@ export default function PortfolioTab({
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-auto sidebar-scrollbar">
+            <div className="flex-1 min-h-0 overflow-auto sidebar-scrollbar">
                 {tabs.map((tab) => (
                     <div key={tab.id} className={tab.isActive ? "" : "hidden"}>
                         {renderContent(tab.content)}
