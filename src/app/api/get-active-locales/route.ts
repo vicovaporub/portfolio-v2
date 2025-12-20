@@ -1,9 +1,8 @@
-import { getActiveLocales } from '@/backend/controllers/localesController';
-import { NextResponse } from 'next/server';
+import { getActiveLocales } from "@/server-logic/controllers/localesController";
+import { NextResponse } from "next/server";
 
 export async function GET() {
+  const locales = await getActiveLocales();
 
-    const locales = await getActiveLocales()
-    
-    return NextResponse.json({ activeLocales: locales });
-} 
+  return NextResponse.json({ activeLocales: locales });
+}

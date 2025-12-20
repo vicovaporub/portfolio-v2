@@ -1,13 +1,13 @@
-import { getProjectsArrayWithTechnologies } from "@/backend/controllers/projectsController";
+import { getProjectsArrayWithTechnologies } from "@/server-logic/controllers/projectsController";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    const projects = await getProjectsArrayWithTechnologies() 
+  const projects = await getProjectsArrayWithTechnologies();
 
-    projects.sort((a, b) => b.number - a.number);
-    projects.forEach((project) => {
-        project.type = "project";
-    });
+  projects.sort((a, b) => b.number - a.number);
+  projects.forEach((project) => {
+    project.type = "project";
+  });
 
-    return NextResponse.json({ projects });
+  return NextResponse.json({ projects });
 }
