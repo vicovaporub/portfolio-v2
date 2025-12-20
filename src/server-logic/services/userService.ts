@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import { AppError } from "../lib/errors";
 
 
 export const UserService = {
@@ -8,7 +9,13 @@ export const UserService = {
             .from('portfolio_user')
             .select('*')
         
-        if (error) throw error;
+        if (error) {
+            throw AppError.fromSupabaseError(error, 'Failed to fetch user data');
+        }
+        
+        if (!data || data.length === 0) {
+            throw AppError.notFound('User');
+        }
         
         return data;
     }

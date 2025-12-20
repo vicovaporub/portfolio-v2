@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import { AppError } from "../lib/errors";
 
 
 export const AboutService = {
@@ -9,7 +10,13 @@ export const AboutService = {
             .select('*')
             .single()
         
-        if (error) throw error;
+        if (error) {
+            throw AppError.fromSupabaseError(error, 'Failed to fetch about content');
+        }
+        
+        if (!data) {
+            throw AppError.notFound('About content');
+        }
         
         return data;
     },
