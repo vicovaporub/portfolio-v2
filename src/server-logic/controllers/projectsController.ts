@@ -19,5 +19,10 @@ export const getProjectsArrayWithTechnologies = async () => {
 
     const projects = await ProjectService.getProjectsArrayWithTechnologies()
 
+    projects.sort((a, b) => b.number - a.number);
+    projects.forEach((project) => {
+        project.type = "project";
+    });
+
     return projects;
 }

@@ -6,11 +6,6 @@ export async function GET() {
     try {
         const projects = await getProjectsArrayWithTechnologies();
 
-        projects.sort((a, b) => b.number - a.number);
-        projects.forEach((project) => {
-            project.type = "project";
-        });
-
         return NextResponse.json({ projects });
     } catch (error) {
         return handleError(error);
