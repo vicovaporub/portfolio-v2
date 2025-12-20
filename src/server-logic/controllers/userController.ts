@@ -4,5 +4,5 @@ export const getUserData = async () => {
 
     const userData = await UserService.getUserData();
 
-    return userData;
+    return userData[0];
 }

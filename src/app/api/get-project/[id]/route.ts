@@ -4,17 +4,10 @@ import { handleError } from "@/server-logic/lib/errorHandler";
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = params;
-
-        if (!id) {
-            return NextResponse.json(
-                { error: { message: "Project ID is required", code: "VALIDATION_ERROR", statusCode: 400 } },
-                { status: 400 }
-            );
-        }
+        const { id } = await params;
 
         const project = await getProjectById(id);
 
