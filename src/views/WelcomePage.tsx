@@ -5,6 +5,8 @@ import Image from "next/image";
 import { UserContext } from "@/contexts/UserContext";
 import { getLocalizedText, portfolioTexts } from "@/lib/base";
 import { useLocale } from "@/hooks/useLocale";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import ErrorMessage from "@/components/ErrorMessage";
 
 interface WelcomePageProps {
   onOpenFile?: (fileId: string) => void;
@@ -13,7 +15,7 @@ interface WelcomePageProps {
 const { menu } = portfolioTexts;
 
 export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
-    const { user, projects } = useContext(UserContext);
+    const { user, projects, isLoading, error } = useContext(UserContext);
     const { locale } = useLocale();
     const [isExpanded, setIsExpanded] = useState(false);
     const topCount = 5;
@@ -85,6 +87,26 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
 
     const topItems = useMemo(() => rightItems.slice(0, topCount), [rightItems]);
     const remainingItems = useMemo(() => rightItems.slice(topCount), [rightItems]);
+
+    if (isLoading) {
+        return (
+            <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
+                <div className="flex-1 flex items-center justify-center">
+                    <LoadingSpinner size="lg" />
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
+                <div className="flex-1 flex items-center justify-center">
+                    <ErrorMessage message={error} />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
