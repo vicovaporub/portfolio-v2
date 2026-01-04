@@ -4,7 +4,7 @@ import { useTabs } from "@/hooks/useTabs";
 import Sidebar from "@/components/sidebar/Sidebar";
 import PortfolioTab from "@/components/tabs/PortfolioTab";
 import WelcomePage from "@/views/WelcomePage";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useContext, useRef } from "react";
 import { Tab } from "@/types/tabs";
 import AboutPage from "@/views/AboutPage";
 import SkillsPage from "@/views/SkillsPage";
@@ -14,6 +14,10 @@ import ProjectPage from "@/views/ProjectPage";
 import { Project } from "@/types/project";
 import { useLocale } from "@/hooks/useLocale";
 import { getLocalizedText } from "@/lib/base";
+import { UserContext } from "@/contexts/UserContext";
+import { useSearchParams } from "next/navigation";
+
+const STORAGE_KEY = "portfolio_tabs_state_v1";
 
 export default function HomePage() {
     const { tabs, openTab, closeTab, activateTab } = useTabs();
@@ -22,8 +26,10 @@ export default function HomePage() {
     );
     const activeTabId = tabs.find((t) => t.isActive)?.id;
     const { locale } = useLocale();
+    const { projects } = useContext(UserContext);
+    const isRestoring = useRef(true);
+    const searchParams = useSearchParams();
 
-    // Função para recolher um item
     const collapseItem = (itemId: string) => {
         setExpandedItems((prev) => {
             const newSet = new Set(prev);
@@ -32,77 +38,144 @@ export default function HomePage() {
         });
     };
 
-    // Função para abrir tabs a partir do WelcomePage
-    const handleWelcomeAction = useCallback(
-        (fileId: string) => {
-            let tab: Tab;
-            switch (fileId) {
-            case "about":
-                tab = {
-                    id: fileId,
-                    title: "about.md",
-                    content: <AboutPage />,
-                    isActive: true,
-                };
-                break;
-            case "skills":
-                tab = {
-                    id: fileId,
-                    title: "skills.json",
-                    content: <SkillsPage />,
-                    isActive: true,
-                };
-                break;
-            case "contact":
-                tab = {
-                    id: fileId,
-                    title: "contact.ts",
-                    content: <ContactPage />,
-                    isActive: true,
-                };
-                break;
-            case "projects":
-                tab = {
-                    id: fileId,
-                    title: "projects/",
-                    content: <ProjectsPage onOpenProject={(project: Project) => {
-                        const projectTab: Tab = {
-                            id: project.id.toString(),
-                            title: getLocalizedText(project.title, locale),
-                            content: <ProjectPage project={project} />,
-                            isActive: true,
-                        };
-                        openTab(projectTab);
-                    }} />,
-                    isActive: true,
-                };
-                break;
-            default:
-                tab = {
-                    id: fileId,
-                    title: fileId,
-                    content: `# ${fileId}\n\nThis is a placeholder content for ${fileId}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+    const createTab = useCallback((fileId: string): Tab | null => {
+        if (projects) {
+            const project = projects.find(p => p.id.toString() === fileId);
+            if (project) {
+                return {
+                    id: project.id.toString(),
+                    title: getLocalizedText(project.title, locale),
+                    content: <ProjectPage project={project} />,
                     isActive: true,
                 };
             }
-            openTab(tab);
+        }
+
+        switch (fileId) {
+        case "welcome":
+            return {
+                id: "welcome",
+                title: "welcome.tsx",
+                 
+                content: <WelcomePage onOpenFile={handleWelcomeAction} />,
+                isActive: true,
+            };
+        case "about":
+            return {
+                id: fileId,
+                title: "about.md",
+                content: <AboutPage />,
+                isActive: true,
+            };
+        case "skills":
+            return {
+                id: fileId,
+                title: "skills.json",
+                content: <SkillsPage />,
+                isActive: true,
+            };
+        case "contact":
+            return {
+                id: fileId,
+                title: "contact.ts",
+                content: <ContactPage />,
+                isActive: true,
+            };
+        case "projects":
+            return {
+                id: fileId,
+                title: "projects/",
+                content: <ProjectsPage onOpenProject={(project: Project) => {
+                    const projectTab = {
+                        id: project.id.toString(),
+                        title: getLocalizedText(project.title, locale),
+                        content: <ProjectPage project={project} />,
+                        isActive: true,
+                    };
+                    openTab(projectTab);
+                }} />,
+                isActive: true,
+            };
+        default:
+            return {
+                id: fileId,
+                title: fileId,
+                content: `# ${fileId}\n\nPlaceholder content.`,
+                isActive: true,
+            };
+        }
+    }, [locale, projects, openTab]);
+
+    const handleWelcomeAction = useCallback(
+        (fileId: string) => {
+            const tab = createTab(fileId);
+            if (tab) openTab(tab);
         },
-        [openTab, locale]
+        [createTab, openTab]
     );
 
     useEffect(() => {
-        if (tabs.length === 0) {
-            const welcomeTab: Tab = {
-                id: "welcome",
-                title: "welcome.tsx",
-                content: <WelcomePage onOpenFile={handleWelcomeAction} />, // Passa a função aqui
-                isActive: true,
-            };
-            openTab(welcomeTab);
-        }
-    }, [tabs.length, openTab, handleWelcomeAction]);
+        if (!isRestoring.current || !projects) return;
 
-    // Função para fechar tab e recolher item na sidebar
+        try {
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            const urlTab = searchParams.get('tab');
+
+            if (savedState) {
+                const { openIds, activeId } = JSON.parse(savedState);
+                const idsToRestore = Array.isArray(openIds) ? openIds : [];
+
+                if (idsToRestore.length > 0) {
+                    idsToRestore.forEach((id: string) => {
+                        const tab = createTab(id);
+                        if (tab) {
+                            openTab({ ...tab, isActive: false });
+                        }
+                    });
+
+                    const targetActiveId = urlTab || activeId;
+                 
+                    setTimeout(() => {
+                        if (targetActiveId) {
+                            activateTab(targetActiveId);
+                        }
+                    }, 0);
+
+                } else {
+                    const welcomeTab = createTab("welcome");
+                    if (welcomeTab) openTab(welcomeTab);
+                }
+            } else {
+                const welcomeTab = createTab("welcome");
+                if (welcomeTab) openTab(welcomeTab);
+            }
+        } catch (e) {
+            console.error("Failed to restore tabs", e);
+            const welcomeTab = createTab("welcome");
+            if (welcomeTab) openTab(welcomeTab);
+        } finally {
+            isRestoring.current = false;
+        }
+    }, [projects, createTab, openTab, activateTab, searchParams]);
+
+    useEffect(() => {
+        if (isRestoring.current) return;
+
+        const activeId = tabs.find(t => t.isActive)?.id;
+        
+        if (activeId) {
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('tab', activeId);
+            window.history.replaceState({}, '', newUrl.toString());
+        }
+
+        const stateToSave = {
+            openIds: tabs.map(t => t.id),
+            activeId: activeId
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+    }, [tabs]);
+
     const handleTabClose = (tabId: string) => {
         closeTab(tabId);
         if (tabId === "projects") {
@@ -112,7 +185,6 @@ export default function HomePage() {
 
     return (
         <main className="flex flex-col md:flex-row h-screen min-h-0 w-full bg-[var(--background)] overflow-hidden">
-            {/* Padding top no mobile para não ficar atrás do botão hambúrguer */}
             <div className="md:contents pt-14 md:pt-0 flex-1 flex min-h-0">
                 <Sidebar
                     onTabOpen={openTab}

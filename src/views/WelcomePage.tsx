@@ -58,9 +58,15 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
             }
         };
         measure();
+        
+        const timeoutId = setTimeout(measure, 100);
+
         window.addEventListener("resize", measure);
-        return () => window.removeEventListener("resize", measure);
-    }, [rightItems, locale]);
+        return () => {
+            window.removeEventListener("resize", measure);
+            clearTimeout(timeoutId);
+        };
+    }, [rightItems, locale, isExpanded]);
 
     const leftActions = [
         {
