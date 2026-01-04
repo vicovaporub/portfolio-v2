@@ -1,6 +1,6 @@
 import { Project } from "@/types/project";
 import { User } from "@/types/user";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 interface UserContextType {
     user?: User;
@@ -16,51 +16,17 @@ export const UserContext = createContext<UserContextType>({
     error: null
 });
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User>()
-    const [projects, setProjects] = useState<Project[]>()
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+interface UserProviderProps {
+    children: React.ReactNode;
+    initialUser?: User;
+    initialProjects?: Project[];
+}
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true)
-                setError(null)
-
-                const [userResponse, projectsResponse] = await Promise.all([
-                    fetch('/api/get-user'),
-                    fetch('/api/get-project-array')
-                ])
-
-                // Verificar se há erros nas respostas
-                if (!userResponse.ok) {
-                    const userError = await userResponse.json()
-                    throw new Error(userError.error?.message || 'Failed to fetch user data')
-                }
-
-                if (!projectsResponse.ok) {
-                    const projectsError = await projectsResponse.json()
-                    throw new Error(projectsError.error?.message || 'Failed to fetch projects')
-                }
-
-                const [userData, projectsData] = await Promise.all([
-                    userResponse.json(),
-                    projectsResponse.json()
-                ])
-
-                setUser(userData.userData)
-                setProjects(projectsData.projects)
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred'
-                setError(errorMessage)
-                console.error('Error fetching user data:', err)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchData()
-    }, [])
+export const UserProvider = ({ children, initialUser, initialProjects }: UserProviderProps) => {
+    const [user] = useState<User | undefined>(initialUser)
+    const [projects] = useState<Project[] | undefined>(initialProjects)
+    const [isLoading] = useState(false)
+    const [error] = useState<string | null>(null)
     
     return (
         <UserContext.Provider value={{ user, projects, isLoading, error }}>
