@@ -1,52 +1,37 @@
 'use client';
 
 import { createContext, useEffect, useState, ReactNode } from "react";
-import { Locale, LocaleContextType, LocaleData } from "@/types/locale";
+import { Locale, LocaleContextType } from "@/types/locale";
 
 export const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
+interface LocaleProviderProps {
+    children: ReactNode;
+    initialLocales: Locale[];
+}
+
+export function LocaleProvider({ children, initialLocales }: LocaleProviderProps) {
     const [locale, setLocaleState] = useState<Locale>('en');
-    const [availableLocales, setAvailableLocales] = useState<Locale[]>(['en']);
+    const [availableLocales] = useState<Locale[]>(initialLocales);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchAvailableLocales = async (): Promise<Locale[]> => {
-        try {
-            const response = await fetch('/api/get-active-locales');
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error?.message || 'Failed to fetch locales');
-            }
-            const localesData = await response.json();
-            const locales = localesData.activeLocales
-                .map((locale: LocaleData) => locale.language_tag);
-            return locales;
-        } catch (error) {
-            console.error('Error fetching locales:', error);
-            // Retorna fallback em caso de erro
-            return ['en'];
-        }
-    };
-
-    const detectBrowserLocale = (availableLocales: Locale[]): Locale => {
-        if (typeof window === 'undefined') return availableLocales[0] || 'en';
+    const detectBrowserLocale = (available: Locale[]): Locale => {
+        if (typeof window === 'undefined') return available[0] || 'en';
     
         const browserLocale = navigator.language.toLowerCase();
     
-        for (const availableLocale of availableLocales) {
+        for (const availableLocale of available) {
             if (browserLocale.startsWith(availableLocale)) {
                 return availableLocale;
             }
         }
     
-        return availableLocales[0] || 'en';
+        return available[0] || 'en';
     };
 
     const setLocale = (newLocale: Locale) => {
-
         if (availableLocales.includes(newLocale)) {
             setLocaleState(newLocale);
-      
             if (typeof window !== 'undefined') {
                 localStorage.setItem('locale', newLocale);
             }
@@ -56,15 +41,12 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        const initializeLocales = async () => {
+        const initializeLocales = () => {
             try {
-                const locales = await fetchAvailableLocales();
-                setAvailableLocales(locales);
-
                 const savedLocale = localStorage.getItem('locale') as Locale;
-                const detectedLocale = detectBrowserLocale(locales);
+                const detectedLocale = detectBrowserLocale(availableLocales);
         
-                const initialLocale = (savedLocale && locales.includes(savedLocale)) 
+                const initialLocale = (savedLocale && availableLocales.includes(savedLocale)) 
                     ? savedLocale 
                     : detectedLocale;
         
@@ -78,12 +60,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
         };
 
         initializeLocales();
-    }, []);
+    }, [availableLocales]);
 
     useEffect(() => {
-        document.documentElement.lang =  locale;
+        document.documentElement.lang = locale;
     }, [locale]);
-
 
     return (
         <LocaleContext.Provider value={{ locale, setLocale, isLoading, availableLocales }}>
