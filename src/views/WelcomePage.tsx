@@ -6,7 +6,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { getLocalizedText, portfolioTexts } from "@/lib/base";
 import { useLocale } from "@/hooks/useLocale";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import ErrorMessage from "@/components/ErrorMessage";
+import EmptyState from "@/components/EmptyState";
 
 interface WelcomePageProps {
   onOpenFile?: (fileId: string) => void;
@@ -108,7 +108,15 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
         return (
             <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
                 <div className="flex-1 flex items-center justify-center">
-                    <ErrorMessage message={error} />
+                    <EmptyState 
+                        title="Something went wrong" 
+                        message={error}
+                        icon={
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                                <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+                            </svg>
+                        }
+                    />
                 </div>
             </div>
         );
