@@ -72,6 +72,11 @@ export const portfolioTexts = {
             title: 'Contact ^^pt-BR:Contato',
         }
     },
+    common: {
+        noData: 'No data found ^^pt-BR:Nenhum dado encontrado',
+        error: 'Something went wrong ^^pt-BR:Algo deu errado',
+        retry: 'Retry ^^pt-BR:Tentar novamente'
+    },
     menu: {
         menuLabel: 'Menu ^^pt-BR:Menu',
         menuItem: {
