@@ -134,6 +134,18 @@ export default function HomePage() {
                     });
 
                     const targetActiveId = urlTab || activeId;
+
+                    const shouldExpandProjects = idsToRestore.some((id: string) => 
+                        id === "projects" || !isNaN(Number(id))
+                    );
+
+                    if (shouldExpandProjects) {
+                        setExpandedItems(prev => {
+                            const newSet = new Set(prev);
+                            newSet.add("projects");
+                            return newSet;
+                        });
+                    }
                  
                     setTimeout(() => {
                         if (targetActiveId) {
