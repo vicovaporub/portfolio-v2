@@ -4,7 +4,7 @@ import { UserContext } from '@/contexts/UserContext';
 import { useContext } from 'react';
 import { Project } from '@/types/project';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import ErrorMessage from '@/components/ErrorMessage';
+import EmptyState from '@/components/EmptyState';
 
 const ProjectsPage = ({ onOpenProject }: { onOpenProject?: (project: Project) => void }) => {
     const { projects, isLoading, error } = useContext(UserContext)
@@ -22,7 +22,15 @@ const ProjectsPage = ({ onOpenProject }: { onOpenProject?: (project: Project) =>
     if (error) {
         return (
             <div className="p-4 md:p-6 bg-[var(--background)] text-[var(--text-primary)] theme-transition">
-                <ErrorMessage message={error} />
+                <EmptyState 
+                    title="Something went wrong" 
+                    message={error}
+                    icon={
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                            <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+                        </svg>
+                    }
+                />
             </div>
         );
     }
@@ -31,7 +39,10 @@ const ProjectsPage = ({ onOpenProject }: { onOpenProject?: (project: Project) =>
         return (
             <div className="p-4 md:p-6 bg-[var(--background)] text-[var(--text-primary)] theme-transition">
                 <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Projects</h1>
-                <p className="text-[var(--text-muted)]">No projects found.</p>
+                <EmptyState 
+                    title="No projects found"
+                    message="I haven't uploaded any projects yet. Check back soon!"
+                />
             </div>
         );
     }
