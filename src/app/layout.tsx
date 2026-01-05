@@ -4,6 +4,9 @@ import "./globals.css";
 import AppProvider from "@/contexts/AppProvider";
 import { getUserData } from "@/server-logic/controllers/userController";
 import { getProjectsArrayWithTechnologies } from "@/server-logic/controllers/projectsController";
+import { getAboutContent } from "@/server-logic/controllers/aboutController";
+import { getActiveLocales } from "@/server-logic/controllers/localesController";
+import { LocaleData } from "@/types/locale";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -25,18 +28,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    // Agora usando os Controllers, que já cuidam da lógica de negócio
-    const [user, projects] = await Promise.all([
+    const [user, projects, about, localesData] = await Promise.all([
         getUserData(),
-        getProjectsArrayWithTechnologies()
+        getProjectsArrayWithTechnologies(),
+        getAboutContent(),
+        getActiveLocales()
     ]);
+
+    const locales = (localesData as LocaleData[]).map((l: LocaleData) => l.language_tag);
 
     return (
         <html lang="pt-BR" suppressHydrationWarning>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <AppProvider initialUser={user} initialProjects={projects}>
+                <AppProvider 
+                    initialUser={user} 
+                    initialProjects={projects}
+                    initialAbout={about}
+                    initialLocales={locales}
+                >
                     {children}
                 </AppProvider>
             </body>
