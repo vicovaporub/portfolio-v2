@@ -3,26 +3,16 @@
 import { useLocale } from "@/hooks/useLocale";
 import { getLocalizedText } from "@/lib/base";
 import Markdown from "react-markdown";
-import { useEffect, useState } from "react"
-
-interface AboutData {
-  id: number
-  text: string 
-}
+import { useContext } from "react"
+import { UserContext } from "@/contexts/UserContext";
 
 export default function AboutPage() {
-    const [aboutData, setAboutData] = useState<AboutData | null>(null)
+    const { about } = useContext(UserContext);
     const { locale } = useLocale()
 
-    useEffect(() => {
-        const getAboutData = async () => {
-            const response = await fetch('/api/get-about')
-            const data = await response.json()
-            setAboutData(data.aboutContent)
-        }
-        getAboutData()
-    }, []) 
-
+    if (!about) {
+        return null;
+    }
 
     return (
         <div className="p-4">
@@ -30,7 +20,7 @@ export default function AboutPage() {
                 <div className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed">
                     <div className="flex flex-col gap-4">
                         <Markdown>
-                            {getLocalizedText(aboutData?.text ?? '', locale)}
+                            {getLocalizedText(about.text, locale)}
                         </Markdown>
                     </div>
                 </div>
