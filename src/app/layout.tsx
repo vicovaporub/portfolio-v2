@@ -6,6 +6,7 @@ import { getUserData } from "@/server-logic/controllers/userController";
 import { getProjectsArrayWithTechnologies } from "@/server-logic/controllers/projectsController";
 import { getAboutContent } from "@/server-logic/controllers/aboutController";
 import { getActiveLocales } from "@/server-logic/controllers/localesController";
+import { getAllTechnologies } from "@/server-logic/controllers/technologyController";
 import { LocaleData } from "@/types/locale";
 
 const geistSans = Geist({
@@ -28,11 +29,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const [user, projects, about, localesData] = await Promise.all([
+    const [user, projects, about, localesData, technologies] = await Promise.all([
         getUserData(),
         getProjectsArrayWithTechnologies(),
         getAboutContent(),
-        getActiveLocales()
+        getActiveLocales(),
+        getAllTechnologies()
     ]);
 
     const locales = (localesData as LocaleData[]).map((l: LocaleData) => l.language_tag);
@@ -47,6 +49,7 @@ export default async function RootLayout({
                     initialProjects={projects}
                     initialAbout={about}
                     initialLocales={locales}
+                    initialTechnologies={technologies}
                 >
                     {children}
                 </AppProvider>
