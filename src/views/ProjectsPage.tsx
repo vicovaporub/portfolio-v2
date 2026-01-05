@@ -50,10 +50,16 @@ const ProjectsPage = ({ onOpenProject }: { onOpenProject?: (project: Project) =>
     return (
         <div className="p-4 md:p-6 bg-[var(--background)] text-[var(--text-primary)] theme-transition">
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Projects</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {projects.map((project) => {
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+                {projects.map((project, index) => {
                     return (
-                        <ProjectCard key={project.id} project={project} onOpenProject={onOpenProject} />
+                        <div 
+                            key={project.id} 
+                            className="opacity-0 animate-fade-in-up h-full"
+                            style={{ animationDelay: `${index * 0.08}s`, animationFillMode: 'forwards' }}
+                        >
+                            <ProjectCard project={project} onOpenProject={onOpenProject} />
+                        </div>
                     )
                 })}
             </div>
