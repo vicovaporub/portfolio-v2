@@ -1,51 +1,30 @@
 'use client'
 
-import { LocaleProvider } from "./LocaleContext"
-
-import { ThemeProvider } from "./ThemeContext"
-
-import { UserProvider } from "./UserContext"
-
+import { LocaleProvider } from "@/contexts/LocaleContext"
+import { ThemeProvider } from "@/contexts/ThemeContext"
+import { UserProvider, AboutData } from "@/contexts/UserContext"
 import { User } from "@/types/user"
-
 import { Project } from "@/types/project"
-
-
+import { Locale } from "@/types/locale"
 
 interface AppProviderProps {
-
     children: React.ReactNode;
-
     initialUser?: User;
-
     initialProjects?: Project[];
-
+    initialLocales: Locale[];
+    initialAbout?: AboutData;
 }
 
-
-
-const AppProvider = ({ children, initialUser, initialProjects }: AppProviderProps) => {
-
+const AppProvider = ({ children, initialUser, initialProjects, initialLocales, initialAbout }: AppProviderProps) => {
     return (
-
-        <LocaleProvider>
-
+        <LocaleProvider initialLocales={initialLocales}>
             <ThemeProvider>
-
-                <UserProvider initialUser={initialUser} initialProjects={initialProjects}>
-
+                <UserProvider initialUser={initialUser} initialProjects={initialProjects} initialAbout={initialAbout}>
                     {children}
-
                 </UserProvider>
-
             </ThemeProvider>
-
         </LocaleProvider>
-
     )
-
 }
-
-
 
 export default AppProvider
