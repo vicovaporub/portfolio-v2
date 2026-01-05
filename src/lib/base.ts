@@ -58,7 +58,8 @@ export const portfolioTexts = {
                 title: 'Project ^^pt-BR:Projeto',
                 description: 'Project description ^^pt-BR:Descrição do projeto',
                 technologies: 'Technologies ^^pt-BR:Tecnologias',
-                link: 'Link ^^pt-BR:Link'
+                liveProject: 'Live project ^^pt-BR:Projeto em produção',
+                sourceCode: 'Source code ^^pt-BR:Código fonte'
             }
         },
         skills: {
