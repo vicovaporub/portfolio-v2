@@ -29,13 +29,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const [user, projects, about, localesData, technologies] = await Promise.all([
-        getUserData(),
-        getProjectsArrayWithTechnologies(),
-        getAboutContent(),
-        getActiveLocales(),
-        getAllTechnologies()
-    ]);
+    let user, projects, about, localesData, technologies;
+
+    try {
+        [user, projects, about, localesData, technologies] = await Promise.all([
+            getUserData(),
+            getProjectsArrayWithTechnologies(),
+            getAboutContent(),
+            getActiveLocales(),
+            getAllTechnologies()
+        ]);
+    } catch (error) {
+        console.error("CRITICAL: Failed to fetch initial data for RootLayout", error);
+        throw error;
+    }
 
     const locales = (localesData as LocaleData[]).map((l: LocaleData) => l.language_tag);
 
