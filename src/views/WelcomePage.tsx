@@ -178,7 +178,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                             <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide gap-1 sm:gap-0">
                                 <span>📍 São Paulo, Brasil</span>
                                 <span>📧 seu.email@exemplo.com</span>
-                                <span>🐙 github.com/seuusuario</span>
+                                <span>🐙 github.com/vicovaporub</span>
                             </div>
                         </div>
                     </div>
@@ -266,7 +266,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                     <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide gap-1 sm:gap-0">
                         <span>📍 São Paulo, Brasil</span>
                         <span>📧 seu.email@exemplo.com</span>
-                        <span>🐙 github.com/seuusuario</span>
+                        <span>🐙 github.com/vicovaporub</span>
                     </div>
                 </div>
             </div>
