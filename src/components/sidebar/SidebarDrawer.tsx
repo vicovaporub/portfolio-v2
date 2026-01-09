@@ -18,11 +18,11 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
                 aria-label="Fechar menu"
             />
             <aside
-                className={`fixed top-0 left-0 h-full w-64 max-w-full bg-[var(--sidebar-bg)] border-r border-[var(--border)] z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:min-h-0 md:z-0`}
+                className={`fixed top-0 left-0 h-full w-64 max-w-full bg-sidebar-bg border-r border-border z-50 flex flex-col font-mono theme-transition transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:w-60 md:h-screen md:min-h-0 md:z-0`}
             >
-                <div className="hidden md:flex items-center justify-between px-3 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar-header-bg)]">
+                <div className="hidden md:flex items-center justify-between px-3 py-2.5 border-b border-border bg-sidebar-header-bg">
                     <div className="flex items-center space-x-2">
-                        <h2 className="text-[var(--text-primary)] font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
+                        <h2 className="text-text-primary font-semibold text-[11px] tracking-wide uppercase">Portfolio</h2>
                     </div>
                     <div className="flex items-center space-x-1">
                         <LanguageToggle />
@@ -32,7 +32,7 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
                 </div>
 
                 <button
-                    className="md:hidden absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                    className="md:hidden absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-text-muted hover:text-text-primary"
                     onClick={onClose}
                     aria-label="Close menu"
                 >
@@ -46,8 +46,8 @@ export default function SidebarDrawer({ isOpen, onClose, children, userName }: S
                         {children}
                     </div>
                 </div>
-                <div className="border-t border-[var(--border)] p-2 bg-[var(--sidebar-header-bg)]">
-                    <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
+                <div className="border-t border-border p-2 bg-sidebar-header-bg">
+                    <div className="flex items-center justify-between text-[10px] text-text-muted font-mono">
                         <span>{userName}</span>
                         <span>2025</span>
                     </div>

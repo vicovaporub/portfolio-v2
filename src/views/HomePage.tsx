@@ -196,7 +196,7 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex flex-col md:flex-row h-screen min-h-0 w-full bg-[var(--background)] overflow-hidden">
+        <main className="flex flex-col md:flex-row h-screen min-h-0 w-full bg-background overflow-hidden">
             <div className="md:contents pt-14 md:pt-0 flex-1 flex min-h-0">
                 <Sidebar
                     onTabOpen={openTab}

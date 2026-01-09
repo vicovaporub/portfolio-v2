@@ -15,7 +15,7 @@ export default function Error({
     }, [error]);
  
     return (
-        <div className="flex items-center justify-center h-screen bg-[var(--background)]">
+        <div className="flex items-center justify-center h-screen bg-background">
             <SystemError error={error} reset={reset} />
         </div>
     );

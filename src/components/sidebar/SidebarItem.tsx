@@ -21,8 +21,8 @@ export default function SidebarItem({
           ${depthPadding}
           ${
         isActive
-            ? "text-[var(--accent-blue)] font-medium"
-            : "text-[var(--text-secondary)] hover:text-[var(--accent-blue)]"
+            ? "text-accent-blue font-medium"
+            : "text-text-secondary hover:text-accent-blue"
         }
           ${depth === 0 ? "font-semibold tracking-wide" : "font-normal"}
         `}
@@ -65,7 +65,7 @@ export default function SidebarItem({
                 </span>
             </div>
             {hasChildren && isExpanded && (
-                <div className="ml-2 border-l border-[var(--border)]/30">
+                <div className="ml-2 border-l border-border/30">
                     {item.children!.map((child) => (
                         <SidebarItem
                             key={child.id}

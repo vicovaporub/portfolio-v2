@@ -12,15 +12,15 @@ export default function SkillsPage() {
 
     if (!technologies || technologies.length === 0) {
         return (
-            <div className="p-8 text-center text-[var(--text-muted)]">
+            <div className="p-8 text-center text-text-muted">
                 No skills found.
             </div>
         );
     }
 
     return (
-        <div className="w-full p-4 md:p-8 bg-[var(--background)] text-[var(--text-primary)] theme-transition animate-fade-in-up">
-            <h1 className="text-2xl md:text-3xl font-bold mb-8 border-b border-[var(--border)] pb-4">
+        <div className="w-full p-4 md:p-8 bg-background text-text-primary theme-transition animate-fade-in-up">
+            <h1 className="text-2xl md:text-3xl font-bold mb-8 border-b border-border pb-4">
                 {getLocalizedText(portfolioTexts.pages.skills.title, locale)}
             </h1>
 
@@ -28,7 +28,7 @@ export default function SkillsPage() {
                 {technologies.map((tech, index) => (
                     <div 
                         key={tech.id}
-                        className="group flex flex-col items-center justify-center p-4 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] hover:border-[var(--accent-blue)] hover:bg-[var(--card-hover-bg)] transition-all duration-300 opacity-0 animate-fade-in-up shadow-sm"
+                        className="group flex flex-col items-center justify-center p-4 rounded-xl border border-border bg-card-bg hover:border-accent-blue hover:bg-card-hover-bg transition-all duration-300 opacity-0 animate-fade-in-up shadow-sm"
                         style={{ animationDelay: `${index * 0.03}s`, animationFillMode: 'forwards' }}
                     >
                         <div className="w-12 h-12 mb-3 relative flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300">
@@ -41,12 +41,12 @@ export default function SkillsPage() {
                                     className="object-contain"
                                 />
                             ) : (
-                                <div className="text-2xl font-bold text-[var(--accent-blue)] opacity-50">
+                                <div className="text-2xl font-bold text-accent-blue opacity-50">
                                     {tech.name.charAt(0)}
                                 </div>
                             )}
                         </div>
-                        <span className="text-xs font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] text-center">
+                        <span className="text-xs font-semibold text-text-secondary group-hover:text-text-primary text-center">
                             {tech.name}
                         </span>
                     </div>

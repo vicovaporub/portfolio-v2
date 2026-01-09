@@ -19,8 +19,8 @@ export default function PortfolioTab({
         if (typeof content === "string") {
             return (
                 <div className="p-4">
-                    <div className="bg-[var(--background-secondary)] rounded border border-[var(--border)] p-6 theme-transition">
-                        <div className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed whitespace-pre-wrap">
+                    <div className="bg-background-secondary rounded border border-border p-6 theme-transition">
+                        <div className="text-[11px] text-text-secondary font-mono leading-relaxed whitespace-pre-wrap">
                             {content}
                         </div>
                     </div>
@@ -31,19 +31,19 @@ export default function PortfolioTab({
     };
 
     return (
-        <div className="flex-1 min-h-0 flex flex-col bg-[var(--background)] theme-transition">
-            <div className="flex flex-wrap bg-[var(--tab-bg)] min-h-[35px] theme-transition">
+        <div className="flex-1 min-h-0 flex flex-col bg-background theme-transition">
+            <div className="flex flex-wrap bg-tab-bg min-h-[35px] theme-transition">
                 {tabs.map((tab) => (
                     <div
                         key={tab.id}
                         className={`
               flex items-center px-4 py-2 cursor-default transition-all duration-150 select-none theme-transition
-              border border-[var(--tab-border)]
+              border border-tab-border
               w-[155px]
               ${
                     tab.isActive
-                        ? "bg-[var(--tab-active-bg)] text-[var(--text-primary)]"
-                        : "bg-[var(--tab-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--tab-hover-bg)]"
+                        ? "bg-tab-active-bg text-text-primary"
+                        : "bg-tab-bg text-text-secondary hover:text-text-primary hover:bg-tab-hover-bg"
                     }
             `}
                         onClick={() => onTabActivate?.(tab.id)}
@@ -54,20 +54,20 @@ export default function PortfolioTab({
                         <span
                             className={`flex-1 min-w-0 truncate text-[11px] font-mono ${
                                 tab.isActive
-                                    ? "text-[var(--accent-blue)]"
-                                    : "text-[var(--text-secondary)]"
+                                    ? "text-accent-blue"
+                                    : "text-text-secondary"
                             }`}
                         >
                             {tab.title}
                         </span>
                         <button
-                            className="ml-3 flex-shrink-0 w-4 h-4 rounded hover:bg-[var(--hover-bg)] flex items-center justify-center transition-colors cursor-pointer"
+                            className="ml-3 flex-shrink-0 w-4 h-4 rounded hover:bg-hover-bg flex items-center justify-center transition-colors cursor-pointer"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onTabClose?.(tab.id);
                             }}
                         >
-                            <span className="text-[12px] text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+                            <span className="text-[12px] text-text-muted hover:text-text-primary">
                 ×
                             </span>
                         </button>

@@ -28,7 +28,7 @@ export default function EmptyState({
 
     return (
         <div className={`flex flex-col items-center justify-center p-8 text-center min-h-[300px] animate-in fade-in zoom-in duration-300 ${className}`}>
-            <div className="mb-4 text-[var(--text-muted)] opacity-50">
+            <div className="mb-4 text-text-muted opacity-50">
                 {icon || (
                     <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -46,12 +46,12 @@ export default function EmptyState({
                 )}
             </div>
             
-            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
                 {displayTitle}
             </h3>
             
             {message && (
-                <p className="text-[var(--text-muted)] max-w-sm mb-6 text-sm">
+                <p className="text-text-muted max-w-sm mb-6 text-sm">
                     {message}
                 </p>
             )}
@@ -59,7 +59,7 @@ export default function EmptyState({
             {actionLabel && onAction && (
                 <button
                     onClick={onAction}
-                    className="px-4 py-2 text-sm font-medium rounded-md bg-[var(--accent-blue)] text-white hover:opacity-90 transition-opacity"
+                    className="px-4 py-2 text-sm font-medium rounded-md bg-accent-blue text-white hover:opacity-90 transition-opacity"
                 >
                     {displayActionLabel}
                 </button>

@@ -96,7 +96,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
 
     if (isLoading) {
         return (
-            <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
+            <div className="flex-1 bg-background text-text-primary flex flex-col theme-transition">
                 <div className="flex-1 flex items-center justify-center">
                     <LoadingSpinner size="lg" />
                 </div>
@@ -106,7 +106,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
 
     if (error) {
         return (
-            <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
+            <div className="flex-1 bg-background text-text-primary flex flex-col theme-transition">
                 <div className="flex-1 flex items-center justify-center">
                     <EmptyState 
                         title="Something went wrong" 
@@ -123,17 +123,17 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
     }
 
     return (
-        <div className="flex-1 bg-[var(--background)] text-[var(--text-primary)] flex flex-col theme-transition">
+        <div className="flex-1 bg-background text-text-primary flex flex-col theme-transition">
             <div className="flex-1 flex flex-col pt-8 md:pt-24 px-4 md:pl-24 space-y-8 md:space-y-12 w-full">
                 <div className="space-y-2">
                     <div className="flex flex-col md:flex-row items-start md:items-end justify-between max-w-2xl w-full gap-4 md:gap-0">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-light">{user?.name}</h1>
-                            <p className="text-base md:text-lg font-normal text-[var(--accent-blue)] tracking-wide mb-2">
+                            <p className="text-base md:text-lg font-normal text-accent-blue tracking-wide mb-2">
                                 {getLocalizedText(portfolioTexts.pages.welcome.title, locale)}
                             </p>
                         </div>
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-blue)]/80 flex items-center justify-center text-2xl font-bold">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-linear-to-br from-accent-blue to-accent-blue/80 flex items-center justify-center text-2xl font-bold">
                             {user?.image_path ? (
                                 <Image
                                     src={user?.image_path}
@@ -152,19 +152,19 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                 <div className="flex flex-col md:flex-row w-full max-w-4xl mt-4 md:mt-6 space-y-8 md:space-y-0 md:space-x-16">
                     <div className="md:w-1/2 space-y-6">
                         <div className="space-y-2">
-                            <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">
+                            <h2 className="text-base font-semibold text-accent-blue mb-2 tracking-wide">
                                 {getLocalizedText(portfolioTexts.menu.menuLabel, locale)}
                             </h2>
                             {leftActions.map((item, index) => (
                                 <button
                                     key={index}
                                     onClick={item.action}
-                                    className="w-full hover:cursor-pointer flex items-center space-x-3 p-2 text-left hover:bg-[var(--hover-bg)] rounded transition-colors group theme-transition"
+                                    className="w-full hover:cursor-pointer flex items-center space-x-3 p-2 text-left hover:bg-hover-bg rounded transition-colors group theme-transition"
                                 >
-                                    <span className="text-base opacity-70 group-hover:opacity-100 text-[var(--accent-blue)]">
+                                    <span className="text-base opacity-70 group-hover:opacity-100 text-accent-blue">
                                         {item.icon}
                                     </span>
-                                    <span className="text-[var(--accent-blue)] group-hover:text-[var(--text-primary)] font-light tracking-wide text-[16px]">
+                                    <span className="text-accent-blue group-hover:text-text-primary font-light tracking-wide text-[16px]">
                                         {item.label}
                                     </span>
                                 </button>
@@ -172,10 +172,10 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                         </div>
 
                         <div className="hidden md:block space-y-1">
-                            <p className="text-xs text-[var(--accent-blue)] font-light tracking-wide">
+                            <p className="text-xs text-accent-blue font-light tracking-wide">
                     Desenvolvedor Full Stack • React • TypeScript • Node.js
                             </p>
-                            <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide gap-1 sm:gap-0">
+                            <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-accent-blue font-light tracking-wide gap-1 sm:gap-0">
                                 <span>📍 São Paulo, Brasil</span>
                                 <span>📧 seu.email@exemplo.com</span>
                                 <span>🐙 github.com/vicovaporub</span>
@@ -184,7 +184,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                     </div>
 
                     <div className="md:w-1/2 space-y-2">
-                        <h2 className="text-base font-semibold text-[var(--accent-blue)] mb-2 tracking-wide">
+                        <h2 className="text-base font-semibold text-accent-blue mb-2 tracking-wide">
                             {getLocalizedText(
                                 portfolioTexts.pages.welcome.mostUsedSkills,
                                 locale
@@ -194,16 +194,16 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                             {topItems.map((item) => (
                                 <div key={item.id ?? item.label} className="space-y-1">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-[var(--accent-blue)] font-light tracking-wide">
+                                        <span className="text-accent-blue font-light tracking-wide">
                                             {item.label}
                                         </span>
-                                        <span className="text-[var(--accent-blue)] font-light">
+                                        <span className="text-accent-blue font-light">
                                             {item.percentage}%
                                         </span>
                                     </div>
-                                    <div className="w-full bg-[var(--border)] rounded-full h-1.5">
+                                    <div className="w-full bg-border rounded-full h-1.5">
                                         <div
-                                            className="bg-[var(--accent-blue)] h-1.5 rounded-full transition-all duration-1000 ease-out"
+                                            className="bg-accent-blue h-1.5 rounded-full transition-all duration-1000 ease-out"
                                             style={{ width: `${item.percentage}%` }}
                                         ></div>
                                     </div>
@@ -221,16 +221,16 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                                     {remainingItems.map((item) => (
                                         <div key={item.id ?? item.label} className="space-y-1">
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-[var(--accent-blue)] font-light tracking-wide">
+                                                <span className="text-accent-blue font-light tracking-wide">
                                                     {item.label}
                                                 </span>
-                                                <span className="text-[var(--accent-blue)] font-light">
+                                                <span className="text-accent-blue font-light">
                                                     {item.percentage}%
                                                 </span>
                                             </div>
-                                            <div className="w-full bg-[var(--border)] rounded-full h-1.5">
+                                            <div className="w-full bg-border rounded-full h-1.5">
                                                 <div
-                                                    className="bg-[var(--accent-blue)] h-1.5 rounded-full transition-all duration-1000 ease-out"
+                                                    className="bg-accent-blue h-1.5 rounded-full transition-all duration-1000 ease-out"
                                                     style={{ width: `${item.percentage}%` }}
                                                 ></div>
                                             </div>
@@ -242,7 +242,7 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                             {rightItems.length > 5 && (
                                 <div
                                     onClick={() => setIsExpanded((prev) => !prev)}
-                                    className="mt-2 hover:cursor-pointer w-full py-2 flex items-center justify-center text-[var(--accent-blue)] hover:bg-[var(--hover-bg)] rounded transition-colors"
+                                    className="mt-2 hover:cursor-pointer w-full py-2 flex items-center justify-center text-accent-blue hover:bg-hover-bg rounded transition-colors"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -260,10 +260,10 @@ export default function WelcomePage({ onOpenFile }: WelcomePageProps) {
                 </div>
 
                 <div className="block md:hidden space-y-1 mt-6 md:mt-8 mb-4">
-                    <p className="text-xs text-[var(--accent-blue)] font-light tracking-wide">
+                    <p className="text-xs text-accent-blue font-light tracking-wide">
             Desenvolvedor Full Stack • React • TypeScript • Node.js
                     </p>
-                    <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-[var(--accent-blue)] font-light tracking-wide gap-1 sm:gap-0">
+                    <div className="flex flex-col sm:flex-row sm:space-x-6 text-xs text-accent-blue font-light tracking-wide gap-1 sm:gap-0">
                         <span>📍 São Paulo, Brasil</span>
                         <span>📧 seu.email@exemplo.com</span>
                         <span>🐙 github.com/vicovaporub</span>
